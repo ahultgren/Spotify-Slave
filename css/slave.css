@@ -1,0 +1,74 @@
+.clear {
+	clear:both;
+}
+.left {
+	float:left;
+}
+.section {
+	display:none;
+	padding:20px;
+}
+#now-playing {
+	font-size:24px;
+	margin-bottom:30px;
+	line-height: 32px;
+}
+#now-playing a {
+	color:#eeeeee;
+}
+#player-image {
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+#player-image, #player-image .image {
+	float:left;
+	height:128px;
+	width:128px;
+}
+#commands {
+	margin-bottom:30px;
+}
+ul {
+	list-style: disc;
+	margin-left: 20px; 
+}
+a {
+	color:#eeeeee;
+}
+#search-term {
+	width:200px;
+}
+.examples {
+	margin:20px 0;
+}
+#search-results h2 {
+	margin:10px 0 5px;
+	color: #999;
+	font-weight:bold;
+}
+#search-results .sp-player {
+	float:left;
+	margin-right:10px;
+}
+#search-results .add-playlist {
+	margin-top:20px;
+}
+#search-results .sp-list {
+	width:inherit;
+	max-height:inherit;
+}
+#friend-drop {
+	text-align:center;
+	padding:50px;
+	border:1px solid #000;
+	background:#333333;
+	color:#aaaaaa;
+	font-size:16px;
+	margin-bottom:10px;
+}
+#friend-title {
+	font-size:24px;
+	margin:10px 0;
+	line-height: 32px;
+	color:#cccccc;
+}

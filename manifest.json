@@ -1,0 +1,29 @@
+{
+	"BundleType": "Application",
+	"BundleIdentifier": "slave",
+	"BundleVersion": "0.0.1",
+	"AcceptedLinkTypes":[
+		"album",
+		"artist",
+		"track",
+		"playlist",
+		"user"
+	],
+	"AppIcon": {
+		"18x18": "icon.png"
+	},
+	"AppName": {
+		"en": "Spotify Server Client"
+	},
+	"AppDescription": {
+		"en": "Let Spotify be controlled by a local or remote instance of Spotify Server"
+	},
+	"SupportedLanguages": [
+		"en"
+	],
+	"RequiredPermissions": [
+		"https://*",
+		"http://*"
+	],
+	"VendorIdentifier": "se.andreashultgren"
+}
