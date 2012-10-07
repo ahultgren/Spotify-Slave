@@ -1,6 +1,12 @@
 function Slave(args){
 	function Slave(args){
-		var that = this;
+		var that = this,
+			sp = getSpotifyApi(1);
+
+		that.models = sp.require("sp://import/scripts/api/models");
+		that.views = sp.require("sp://import/scripts/api/views");
+		that.ui = sp.require("sp://import/scripts/ui");
+		that.player = new that.views.Player();
 
 		that.socket = args.Socket({
 			io: args.io
@@ -13,7 +19,7 @@ function Slave(args){
 
 jQuery(function($){
 	Slave({
-		Socket = Socket,
-		io: io
+		io: io,
+		Socket: Socket
 	});
 });
