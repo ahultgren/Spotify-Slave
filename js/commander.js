@@ -4,39 +4,73 @@ function Commander(args){
 
 		that.sp = args.sp;
 		that.player = args.player;
+		that.playlist = args.playlist;
 		that.models = args.models;
 	}
 
 	Commander.prototype.do = function(commands, callback) {
 		var that = this,
-			i, l, j, playlist, tracks;
+			i, l;
 
 		for( i = 0, l = commands.length; i < l; i++ ){
-			if( commands[i] === 'playpause' ){
-				//that.player.playing = 0;
-				if( !that.player.context ){
-					// Create new playlist
-					playlist = new that.models.Playlist();
-
-					// Get users tracks
-					//## Should be another way than through core
-					tracks = that.sp.core.library.getTracks();
-
-					// Add tracks to playlist
-					for( j = tracks.length; j--; ){
-						playlist.add(tracks[j].uri);
-					}
-
-					// Start playing
-					that.player.play(tracks[Math.floor(Math.random() * tracks.length)], playlist);
-				}
-				console.log(that.player);
+			// Takes care of all 'static' commands like playpause, name of track, name of artist, next etc
+			if( that.commands[commands[i]] ){
+				that.commands[commands[i]]();
+			}
+			else {
+				//## Figure out what the command is about and route accordingly
 			}
 		}
 
-		callback(['meow', 'mu', 'mjau', 'gnegg']);
+		callback && callback(['meow', 'mu', 'mjau', 'gnegg']);
+	};
+
+	/* Actions */
+
+	Commander.prototype.commands = {
+		playpause: playpause
 	};
 
 	var commander = new Commander(args);
+
+	/* Private functions */
+
+	function playpause(){
+		var that = commander;
+
+			console.log(that.player.playing);
+		if( that.player.playing ){
+			that.player.playing = 0;
+		}
+		else {
+			ensureContext();
+			that.player.playing = 1;
+		}
+	}
+
+	function ensureContext(){
+		var that = commander, 
+			playlist, tracks, track;
+
+		if( !that.player.context ){
+			// Use this app's playlist
+			playlist = that.playlist;
+
+			// Make sure the playlist is not empty
+			if( !playlist.length ){
+				// Get users tracks
+				//## Should be another way than through core
+				tracks = that.sp.core.library.getTracks();
+				track = tracks[Math.floor(Math.random() * tracks.length)];
+
+				// Add random track to playlist
+				playlist.add(track.uri);
+			}
+
+			// Set context
+			that.player.context = playlist;
+		}
+	}
+
 	return commander;
 }

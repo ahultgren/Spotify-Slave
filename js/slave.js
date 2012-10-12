@@ -7,11 +7,13 @@ function Slave(args){
 		that.views = sp.require("sp://import/scripts/api/views");
 		that.ui = sp.require("sp://import/scripts/ui");
 		that.player = new that.views.Player();
+		that.playlist = new that.models.Playlist();
 
 		that.commander = Commander({
 			sp: sp,
 			player: that.player,
-			models: that.models
+			models: that.models,
+			playlist: that.playlist
 		});
 
 		that.socket = args.Socket({
