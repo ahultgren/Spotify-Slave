@@ -4,6 +4,7 @@ function Socket(args){
 
 		that.io = args.io;
 		that.commander = args.commander;
+		that.socket;
 	}
 
 	Socket.prototype.connect = function(url) {
@@ -16,17 +17,15 @@ function Socket(args){
 		});
 
 		that.socket.on('ask', function(data){
-			that.commander.do(data.commands, function(results){
-				console.log(results);
-				that.reply(data.id, results);
+			that.commander.do(data.commands, function(current){
+				that.update(current);
 			});
 		});
 	};
 
-	Socket.prototype.reply = function(id, results) {
+	Socket.prototype.update = function(current) {
 		var that = this;
-
-		that.socket.emit(id, results);
+		that.socket.emit('update', current);
 	};
 
 	var socket = new Socket(args);

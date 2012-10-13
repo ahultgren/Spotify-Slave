@@ -8,21 +8,25 @@ function Commander(args){
 		that.models = args.models;
 	}
 
-	Commander.prototype.do = function(commands, callback) {
+	Commander.prototype.do = function(commands, update) {
 		var that = this,
 			i, l;
 
 		for( i = 0, l = commands.length; i < l; i++ ){
-			// Takes care of all 'static' commands like playpause, name of track, name of artist, next etc
-			if( that.commands[commands[i]] ){
-				that.commands[commands[i]]();
+			// The callback is only used when fresh data is wanted
+			if( commands[i] === 'current' ){
+				//## that.update(update);
 			}
 			else {
-				//## Figure out what the command is about and route accordingly
+				// Takes care of all 'static' commands like playpause, name of track, name of artist, next etc
+				if( that.commands[commands[i]] ){
+					that.commands[commands[i]]();
+				}
+				else {
+					//## Figure out what the command is about and route accordingly
+				}
 			}
 		}
-
-		callback && callback(['meow', 'mu', 'mjau', 'gnegg']);
 	};
 
 	/* Actions */

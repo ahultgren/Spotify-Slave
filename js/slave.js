@@ -22,11 +22,6 @@ function Slave(args){
 		});
 
 		that.initialize();
-
-		//## Testing
-		that.commander.do(['playpause'], function(){
-
-		});
 	}
 
 	Slave.prototype.initialize = function() {
