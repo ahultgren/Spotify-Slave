@@ -1,5 +1,5 @@
-function Slave(args){
-	function Slave(args){
+function Main(args){
+	function Main(args){
 		var that = this,
 			sp = that.sp = getSpotifyApi(1);
 
@@ -8,12 +8,14 @@ function Slave(args){
 		that.ui = sp.require("sp://import/scripts/ui");
 		that.player = new that.views.Player();
 		that.playlist = new that.models.Playlist();
+		that.app = that.models.application;
 
 		that.commander = Commander({
 			sp: sp,
 			player: that.player,
 			models: that.models,
-			playlist: that.playlist
+			playlist: that.playlist,
+			app: that.app
 		});
 
 		that.socket = Socket({
@@ -26,17 +28,18 @@ function Slave(args){
 		});
 
 		that.initialize();
+		that.commander.do(['playpause']);
 	}
 
-	Slave.prototype.initialize = function() {
+	Main.prototype.initialize = function() {
 	};
 
-	var slave = new Slave(args);
-	return slave;
+	var main = new Main(args);
+	return main;
 }
 
 jQuery(function($){
-	window.slave = Slave({
+	window.main = Main({
 		io: io
 	});
 });
