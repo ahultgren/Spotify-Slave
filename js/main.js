@@ -16,23 +16,19 @@ function Slave(args){
 			playlist: that.playlist
 		});
 
-		that.socket = args.Socket({
+		that.socket = Socket({
 			io: args.io,
 			commander: that.commander
+		});
+
+		that.ui = UI({
+			socket: that.socket
 		});
 
 		that.initialize();
 	}
 
 	Slave.prototype.initialize = function() {
-		var that = this,
-			url = $('#url'),
-			token = $('#token');
-
-		// Wait until the user has selected a url
-		$('#connectButton').click(function(){
-			that.socket.connect(url.val() + '?token=' + token.val());
-		});
 	};
 
 	var slave = new Slave(args);
@@ -41,7 +37,6 @@ function Slave(args){
 
 jQuery(function($){
 	window.slave = Slave({
-		io: io,
-		Socket: Socket
+		io: io
 	});
 });
