@@ -76,25 +76,27 @@ function UI(args){
 		}
 
 		function handleDrop(e){
-			var uri = e.originalEvent.dataTransfer.getData('Text');
+			var text = e.originalEvent.dataTransfer.getData('Text'),
+				http = text.split('/'),
+				uri = text.split(':'),
+				playlist = that.ui.main.playlist;
 			
-			that.ui.main.models.Playlist.fromURI(uri, function(tempPlaylist){
-				// Load into the app's playlist
-				var tracks = tempPlaylist.tracks,
-					playlist = that.ui.main.playlist,
-					i;
+			if( (http[5] || uri[1]) === 'playlist' ){
+				that.ui.main.models.Playlist.fromURI(text, function(tempPlaylist){
+					// Load into the app's playlist
+					var tracks = tempPlaylist.tracks,
+						i;
 
-				for( i = tracks.length; i--; ){
-					playlist.add(tracks[i]);
-				}
-				console.log(playlist.tracks);
-			});
+					for( i = tracks.length; i--; ){
+						playlist.add(tracks[i]);
+					}
+				});
+			}
+			else if( (http[3] || uri[1]) === 'track' ){
+				playlist.add(text);
+			}
 
 			this.style.background = '#333333';
-
-			//## Figure out what kind of uri was provided, load it and load it into the playlist
-			if(uri.split(":")[1]=="user") {
-			}
 		}
 	};
 
