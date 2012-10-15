@@ -7,7 +7,8 @@ function UI(args){
 	function UI(args){
 		var that = this;
 
-		that.socket = args.socket;
+		that.main = args.main;
+		that.socket = args.main.socket;
 
 		// Private subcontrollers
 		connect = new Connect(that);
@@ -54,32 +55,46 @@ function UI(args){
 		var that = this,
 			drop = $('#dropzone');
 
-		drop.bind('dragenter', that.handleDragEnter);
-		drop.bind('dragover', that.handleDragOver);
-		drop.bind('dragleave', that.handleDragLeave);
-		drop.bind('drop', that.handleDrop);
-	};
+		drop.bind('dragenter', handleDragEnter);
+		drop.bind('dragover', handleDragOver);
+		drop.bind('dragleave', handleDragLeave);
+		drop.bind('drop', handleDrop);
 
-	Drop.prototype.handleDragEnter = function(e){
-		this.style.background = '#444444';
-	};
 
-	Drop.prototype.handleDragOver = function(e){
-		e.preventDefault();
-		e.originalEvent.dataTransfer.dropEffect = 'copy';
-		return false;
-	};
+		function handleDragEnter(e){
+			this.style.background = '#444444';
+		}
 
-	Drop.prototype.handleDragLeave = function(e){
-		this.style.background = '#333333';
-	};
+		function handleDragOver(e){
+			e.preventDefault();
+			e.originalEvent.dataTransfer.dropEffect = 'copy';
+			return false;
+		}
 
-	Drop.prototype.handleDrop = function(e){
-		var uri = e.originalEvent.dataTransfer.getData('Text');
-		this.style.background = '#333333';
+		function handleDragLeave(e){
+			this.style.background = '#333333';
+		}
 
-		//## Figure out what kind of uri was provided, load it and load it into the playlist
-		if(uri.split(":")[1]=="user") {
+		function handleDrop(e){
+			var uri = e.originalEvent.dataTransfer.getData('Text');
+			
+			that.ui.main.models.Playlist.fromURI(uri, function(tempPlaylist){
+				// Load into the app's playlist
+				var tracks = tempPlaylist.tracks,
+					playlist = that.ui.main.playlist,
+					i;
+
+				for( i = tracks.length; i--; ){
+					playlist.add(tracks[i]);
+				}
+				console.log(playlist.tracks);
+			});
+
+			this.style.background = '#333333';
+
+			//## Figure out what kind of uri was provided, load it and load it into the playlist
+			if(uri.split(":")[1]=="user") {
+			}
 		}
 	};
 

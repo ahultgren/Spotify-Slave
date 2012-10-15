@@ -24,7 +24,7 @@ function Main(args){
 		});
 
 		that.ui = UI({
-			socket: that.socket
+			main: that
 		});
 
 		that.initialize();
