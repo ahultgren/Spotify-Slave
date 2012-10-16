@@ -79,10 +79,11 @@ function UI(args){
 			var text = e.originalEvent.dataTransfer.getData('Text'),
 				http = text.split('/'),
 				uri = text.split(':'),
-				playlist = that.ui.main.playlist;
-			
+				playlist = that.ui.main.playlist,
+				models = that.ui.main.models;
+
 			if( (http[5] || uri[1]) === 'playlist' ){
-				that.ui.main.models.Playlist.fromURI(text, function(tempPlaylist){
+				models.Playlist.fromURI(text, function(tempPlaylist){
 					// Load into the app's playlist
 					var tracks = tempPlaylist.tracks,
 						i;
@@ -94,6 +95,35 @@ function UI(args){
 			}
 			else if( (http[3] || uri[1]) === 'track' ){
 				playlist.add(text);
+			}
+			else if( (http[3] || uri[1]) === 'album' ){
+				models.Album.fromURI(text, function(tempAlbum){
+					// Load into the app's playlist
+					var tracks = tempAlbum.tracks,
+						i;
+
+					for( i = tracks.length; i--; ){
+						playlist.add(tracks[i]);
+					}
+				});
+			}
+			else if( (http[3] || uri[1]) === 'artist' ){
+				models.Artist.fromURI(text, function(tempArtist){
+					var search = new models.Search('artist:"' + tempArtist.name + '"');
+
+					search.localResults = models.LOCALSEARCHRESULTS.IGNORE;
+					search.searchPlaylists = false;
+					search.searchAlbums = false;
+					search.pageSize = 5;
+
+					search.observe(models.EVENT.CHANGE, function(result) {
+						result.tracks.forEach(function(track){
+							playlist.add(track);
+						});
+					});
+
+					search.appendNext();
+				});
 			}
 
 			this.style.background = '#333333';
