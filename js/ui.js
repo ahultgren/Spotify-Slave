@@ -61,56 +61,65 @@ function UI(args){
 
 	Drop.prototype.drop = function(link){
 		var that = this,
-			http = link.split('/'),
-			uri = link.split(':'),
-			playlist = that.ui.main.playlist,
-			models = that.ui.main.models;
+			models = that.ui.main.models,
+			type = (new models.Link(link)).type,
+			playlist = that.ui.main.playlist;
 
-		if( (http[5] || uri[1]) === 'playlist' ){
-			models.Playlist.fromURI(link, function(tempPlaylist){
-				// Load into the app's playlist
-				var tracks = tempPlaylist.tracks,
-					i;
+		/* Types:
+			1: artist
+			2: album
+			4: track
+			5: playlist
+			9: local track
+			10: profile */
 
-				for( i = tracks.length; i--; ){
-					playlist.add(tracks[i]);
-				}
-			});
-		}
-		else if( (http[3] || uri[1]) === 'track' ){
-			playlist.add(link);
-		}
-		else if( (http[3] || uri[1]) === 'album' ){
-			models.Album.fromURI(link, function(tempAlbum){
-				// Load into the app's playlist
-				var tracks = tempAlbum.tracks,
-					i;
+		switch( type ){
+			case 1:
+				models.Artist.fromURI(link, function(tempArtist){
+					var search = new models.Search('artist:"' + tempArtist.name + '"');
 
-				for( i = tracks.length; i--; ){
-					playlist.add(tracks[i]);
-				}
-			});
-		}
-		else if( (http[3] || uri[1]) === 'artist' ){
-			models.Artist.fromURI(link, function(tempArtist){
-				var search = new models.Search('artist:"' + tempArtist.name + '"');
+					search.localResults = models.LOCALSEARCHRESULTS.IGNORE;
+					search.searchPlaylists = false;
+					search.searchAlbums = false;
+					search.pageSize = 5;
 
-				search.localResults = models.LOCALSEARCHRESULTS.IGNORE;
-				search.searchPlaylists = false;
-				search.searchAlbums = false;
-				search.pageSize = 5;
-
-				search.observe(models.EVENT.CHANGE, function(result) {
-					result.tracks.forEach(function(track){
-						playlist.add(track);
+					search.observe(models.EVENT.CHANGE, function(result) {
+						result.tracks.forEach(function(track){
+							playlist.add(track);
+						});
 					});
-				});
 
-				search.appendNext();
-			});
-		}
-		else if( (http[3] || uri[1]) === 'user' ){
-			// Do nothing, Toplist is too unreliable
+					search.appendNext();
+				});
+			break;
+			case 2:
+				models.Album.fromURI(link, function(tempAlbum){
+					// Load into the app's playlist
+					var tracks = tempAlbum.tracks,
+						i;
+
+					for( i = tracks.length; i--; ){
+						playlist.add(tracks[i]);
+					}
+				});
+			break;
+			case 4:
+				playlist.add(link);
+			break;
+			case 5:
+				models.Playlist.fromURI(link, function(tempPlaylist){
+					// Load into the app's playlist
+					var tracks = tempPlaylist.tracks,
+						i;
+
+					for( i = tracks.length; i--; ){
+						playlist.add(tracks[i]);
+					}
+				});
+			break;
+			case 10:
+				// Do nothing, Toplist is too unreliable
+			break;
 		}
 	};
 
