@@ -110,16 +110,7 @@ function UI(args){
 			});
 		}
 		else if( (http[3] || uri[1]) === 'user' ){
-			var toplist = new models.Toplist();
-			toplist.username = link;
-
-			toplist.observe(models.EVENT.CHANGE, function() {
-				toplist.results.forEach(function(track) {
-					playlist.add(track);
-				});
-			});
-
-			toplist.run();
+			// Do nothing, Toplist is too unreliable
 		}
 	};
 
