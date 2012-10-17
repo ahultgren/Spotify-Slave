@@ -28,7 +28,6 @@ function Main(args){
 		});
 
 		that.initialize();
-		that.commander.do(['playpause']);
 	}
 
 	Main.prototype.initialize = function() {
