@@ -13,6 +13,7 @@ function UI(args){
 		// Private subcontrollers
 		connect = new Connect(that);
 		drop = new Drop(that);
+		playlist = new Playlist(that);
 	}
 
 
@@ -141,6 +142,21 @@ function UI(args){
 			this.style.background = '#333333';
 		}
 	};
+
+
+	/* Playlist
+	 * Shows the playlist in the ui
+	 */
+	function Playlist(ui){
+		var that = this,
+			list;
+
+		that.ui = ui;
+
+		// Append playlist to DOM
+		list = new that.ui.main.views.List(that.ui.main.playlist);
+		document.body.appendChild(list.node);
+	}
 
 
 	ui = new UI(args);
