@@ -2,7 +2,7 @@
 
 Turn your Spotify player into a slave of your peers' will. Just connect to an instance of [Spotify Server](https://github.com/ahultgren/Spotify-Server) and anyone with access to the server can controll your Spotify player. On any OS.
 
-_Current version (0.1) only supports playing and pausing a random song, but more will come!_
+_Current version (0.2) only supports playing and pausing a random song, but more will come!_
 
 ## Installation
 
