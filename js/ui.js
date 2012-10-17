@@ -53,30 +53,24 @@ function UI(args){
 	}
 
 	Drop.prototype.initialize = function() {
-		var that = this,
-			drop = $('#dropzone');
+		var that = this;
 
-		drop.bind('dragenter', handleDragEnter);
-		drop.bind('dragover', handleDragOver);
-		drop.bind('dragleave', handleDragLeave);
-		drop.bind('drop', handleDrop);
-
-
-		function handleDragEnter(e){
+		// These can't be prototyped if we want access to 'that'
+		that.handleDragEnter = function(e){
 			this.style.background = '#444444';
-		}
+		};
 
-		function handleDragOver(e){
+		that.handleDragOver = function(e){
 			e.preventDefault();
 			e.originalEvent.dataTransfer.dropEffect = 'copy';
 			return false;
-		}
+		};
 
-		function handleDragLeave(e){
+		that.handleDragLeave = function(e){
 			this.style.background = '#333333';
-		}
+		};
 
-		function handleDrop(e){
+		that.handleDrop = function(e){
 			var text = e.originalEvent.dataTransfer.getData('Text'),
 				http = text.split('/'),
 				uri = text.split(':'),
@@ -140,7 +134,19 @@ function UI(args){
 			}
 
 			this.style.background = '#333333';
-		}
+		};
+
+		that.dropzone();
+	};
+
+	Drop.prototype.dropzone = function() {
+		var that = this,
+			drop = $('#dropzone');
+
+		drop.bind('dragenter', that.handleDragEnter);
+		drop.bind('dragover', that.handleDragOver);
+		drop.bind('dragleave', that.handleDragLeave);
+		drop.bind('drop', that.handleDrop);
 	};
 
 
