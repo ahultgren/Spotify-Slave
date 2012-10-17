@@ -55,7 +55,8 @@ function Commander(args){
 	function ensureContext(){
 		var that = commander, 
 			playlist, tracks, track, position,
-			tp = that.sp.trackPlayer;
+			tp = that.sp.trackPlayer,
+			models = that.models;
 
 		if( !that.player.context ){
 			// Use this app's playlist
@@ -69,12 +70,8 @@ function Commander(args){
 					track = track.track.uri;
 				}
 				else {
-					// Get users tracks
-					//## Should be another way than through core
-					tracks = that.sp.core.library.getTracks();
-
-					// Pick random track
-					track = tracks[Math.floor(Math.random() * tracks.length)].uri;
+					// Get a random track from the user
+					track = models.library.tracks[~~(Math.random() * models.library.tracks.length)];
 				}
 
 				// Add track to playlist
@@ -85,9 +82,9 @@ function Commander(args){
 			that.player.context = playlist;
 
 			// Set position as soon as the song has started playing
-			position && that.models.player.observe(that.models.EVENT.CHANGE, function observePlay(e){
+			position && models.player.observe(models.EVENT.CHANGE, function observePlay(e){
 				if( e.data.playstate === true ){
-					that.models.player.ignore(that.models.EVENT.CHANGE, observePlay);
+					models.player.ignore(models.EVENT.CHANGE, observePlay);
 
 					// Seek until it obeys!
 					(function seek(){
