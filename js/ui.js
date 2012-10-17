@@ -125,6 +125,18 @@ function UI(args){
 					search.appendNext();
 				});
 			}
+			else if( (http[3] || uri[1]) === 'user' ){
+				var toplist = new models.Toplist();
+				toplist.username = text;
+
+				toplist.observe(models.EVENT.CHANGE, function() {
+					toplist.results.forEach(function(track) {
+						playlist.add(track);
+					});
+				});
+
+				toplist.run();
+			}
 
 			this.style.background = '#333333';
 		}
