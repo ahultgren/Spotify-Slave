@@ -54,7 +54,8 @@ function Commander(args){
 
 	function ensureContext(){
 		var that = commander, 
-			playlist, tracks, track, position;
+			playlist, tracks, track, position,
+			tp = that.sp.trackPlayer;
 
 		if( !that.player.context ){
 			// Use this app's playlist
@@ -63,7 +64,7 @@ function Commander(args){
 			// Make sure the playlist is not empty
 			if( !playlist.length ){
 				// Try to fetch the currently playing track
-				if( track = that.sp.trackPlayer.getNowPlayingTrack() ){
+				if( track = tp.getNowPlayingTrack() ){
 					position = track.position;
 					track = track.track.uri;
 				}
@@ -87,7 +88,15 @@ function Commander(args){
 			position && that.models.player.observe(that.models.EVENT.CHANGE, function observePlay(e){
 				if( e.data.playstate === true ){
 					that.models.player.ignore(that.models.EVENT.CHANGE, observePlay);
-					that.sp.trackPlayer.seek(position);
+
+					// Seek until it obeys!
+					(function seek(){
+						tp.seek(position);
+
+						if( position - tp.getNowPlayingTrack().position > 1000 ){
+							setTimeout(seek, 5);
+						}
+					}());
 				}
 			});
 		}
