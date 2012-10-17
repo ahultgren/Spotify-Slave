@@ -55,98 +55,104 @@ function UI(args){
 	Drop.prototype.initialize = function() {
 		var that = this;
 
-		// These can't be prototyped if we want access to 'that'
-		that.handleDragEnter = function(e){
-			this.style.background = '#444444';
-		};
+		that.dropInZone();
+		that.dropOnIcon();
+	};
 
-		that.handleDragOver = function(e){
-			e.preventDefault();
-			e.originalEvent.dataTransfer.dropEffect = 'copy';
-			return false;
-		};
+	Drop.prototype.drop = function(link){
+		var that = this,
+			http = link.split('/'),
+			uri = link.split(':'),
+			playlist = that.ui.main.playlist,
+			models = that.ui.main.models;
 
-		that.handleDragLeave = function(e){
-			this.style.background = '#333333';
-		};
+		if( (http[5] || uri[1]) === 'playlist' ){
+			models.Playlist.fromURI(link, function(tempPlaylist){
+				// Load into the app's playlist
+				var tracks = tempPlaylist.tracks,
+					i;
 
-		that.handleDrop = function(e){
-			var text = e.originalEvent.dataTransfer.getData('Text'),
-				http = text.split('/'),
-				uri = text.split(':'),
-				playlist = that.ui.main.playlist,
-				models = that.ui.main.models;
+				for( i = tracks.length; i--; ){
+					playlist.add(tracks[i]);
+				}
+			});
+		}
+		else if( (http[3] || uri[1]) === 'track' ){
+			playlist.add(link);
+		}
+		else if( (http[3] || uri[1]) === 'album' ){
+			models.Album.fromURI(link, function(tempAlbum){
+				// Load into the app's playlist
+				var tracks = tempAlbum.tracks,
+					i;
 
-			if( (http[5] || uri[1]) === 'playlist' ){
-				models.Playlist.fromURI(text, function(tempPlaylist){
-					// Load into the app's playlist
-					var tracks = tempPlaylist.tracks,
-						i;
+				for( i = tracks.length; i--; ){
+					playlist.add(tracks[i]);
+				}
+			});
+		}
+		else if( (http[3] || uri[1]) === 'artist' ){
+			models.Artist.fromURI(link, function(tempArtist){
+				var search = new models.Search('artist:"' + tempArtist.name + '"');
 
-					for( i = tracks.length; i--; ){
-						playlist.add(tracks[i]);
-					}
-				});
-			}
-			else if( (http[3] || uri[1]) === 'track' ){
-				playlist.add(text);
-			}
-			else if( (http[3] || uri[1]) === 'album' ){
-				models.Album.fromURI(text, function(tempAlbum){
-					// Load into the app's playlist
-					var tracks = tempAlbum.tracks,
-						i;
+				search.localResults = models.LOCALSEARCHRESULTS.IGNORE;
+				search.searchPlaylists = false;
+				search.searchAlbums = false;
+				search.pageSize = 5;
 
-					for( i = tracks.length; i--; ){
-						playlist.add(tracks[i]);
-					}
-				});
-			}
-			else if( (http[3] || uri[1]) === 'artist' ){
-				models.Artist.fromURI(text, function(tempArtist){
-					var search = new models.Search('artist:"' + tempArtist.name + '"');
-
-					search.localResults = models.LOCALSEARCHRESULTS.IGNORE;
-					search.searchPlaylists = false;
-					search.searchAlbums = false;
-					search.pageSize = 5;
-
-					search.observe(models.EVENT.CHANGE, function(result) {
-						result.tracks.forEach(function(track){
-							playlist.add(track);
-						});
-					});
-
-					search.appendNext();
-				});
-			}
-			else if( (http[3] || uri[1]) === 'user' ){
-				var toplist = new models.Toplist();
-				toplist.username = text;
-
-				toplist.observe(models.EVENT.CHANGE, function() {
-					toplist.results.forEach(function(track) {
+				search.observe(models.EVENT.CHANGE, function(result) {
+					result.tracks.forEach(function(track){
 						playlist.add(track);
 					});
 				});
 
-				toplist.run();
-			}
+				search.appendNext();
+			});
+		}
+		else if( (http[3] || uri[1]) === 'user' ){
+			var toplist = new models.Toplist();
+			toplist.username = link;
 
-			this.style.background = '#333333';
-		};
+			toplist.observe(models.EVENT.CHANGE, function() {
+				toplist.results.forEach(function(track) {
+					playlist.add(track);
+				});
+			});
 
-		that.dropzone();
+			toplist.run();
+		}
 	};
 
-	Drop.prototype.dropzone = function() {
+	Drop.prototype.dropInZone = function() {
 		var that = this,
 			drop = $('#dropzone');
 
-		drop.bind('dragenter', that.handleDragEnter);
-		drop.bind('dragover', that.handleDragOver);
-		drop.bind('dragleave', that.handleDragLeave);
-		drop.bind('drop', that.handleDrop);
+		drop.bind('dragenter', function(e){
+			this.style.background = '#444444';
+		});
+		drop.bind('dragover', function(e){
+			e.preventDefault();
+			e.originalEvent.dataTransfer.dropEffect = 'copy';
+			return false;
+		});
+		drop.bind('dragleave', function(e){
+			this.style.background = '#333333';
+		});
+		drop.bind('drop', function(e){
+			that.drop(e.originalEvent.dataTransfer.getData('Text'));
+			this.style.background = '#333333';
+		});
+	};
+
+	Drop.prototype.dropOnIcon = function() {
+		var that = this,
+			models = that.ui.main.models;
+
+		models.application.observe(models.EVENT.LINKSCHANGED, function(){
+			models.application.links.forEach(function(link){
+				that.drop(link);
+			});
+		});
 	};
 
 
