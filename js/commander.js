@@ -6,6 +6,7 @@ function Commander(args){
 		that.player = args.player;
 		that.playlist = args.playlist;
 		that.models = args.models;
+		that.app = args.app;
 	}
 
 	Commander.prototype.do = function(commands, update) {
@@ -42,7 +43,6 @@ function Commander(args){
 	function playpause(){
 		var that = commander;
 
-			console.log(that.player.playing);
 		if( that.player.playing ){
 			that.player.playing = 0;
 		}
@@ -54,7 +54,9 @@ function Commander(args){
 
 	function ensureContext(){
 		var that = commander, 
-			playlist, tracks, track;
+			playlist, tracks, track, position,
+			tp = that.sp.trackPlayer,
+			models = that.models;
 
 		if( !that.player.context ){
 			// Use this app's playlist
@@ -62,17 +64,38 @@ function Commander(args){
 
 			// Make sure the playlist is not empty
 			if( !playlist.length ){
-				// Get users tracks
-				//## Should be another way than through core
-				tracks = that.sp.core.library.getTracks();
-				track = tracks[Math.floor(Math.random() * tracks.length)];
+				// Try to fetch the currently playing track
+				if( track = tp.getNowPlayingTrack() ){
+					position = track.position;
+					track = track.track.uri;
+				}
+				else {
+					// Get a random track from the user
+					track = models.library.tracks[~~(Math.random() * models.library.tracks.length)];
+				}
 
-				// Add random track to playlist
-				playlist.add(track.uri);
+				// Add track to playlist
+				playlist.add(track);
 			}
 
 			// Set context
 			that.player.context = playlist;
+
+			// Set position as soon as the song has started playing
+			position && models.player.observe(models.EVENT.CHANGE, function observePlay(e){
+				if( e.data.playstate === true ){
+					models.player.ignore(models.EVENT.CHANGE, observePlay);
+
+					// Seek until it obeys!
+					(function seek(){
+						tp.seek(position);
+
+						if( position - tp.getNowPlayingTrack().position > 1000 ){
+							setTimeout(seek, 5);
+						}
+					}());
+				}
+			});
 		}
 	}
 
