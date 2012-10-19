@@ -21,6 +21,9 @@ function Commander(args){
 				}
 				else {
 					//## Figure out what the command is about and route accordingly
+					if( !commands[i].indexOf('play track ') ){
+						playURI(commands[i].substring(12, commands[i].length - 1));
+					}
 				}
 			}
 		}
@@ -63,6 +66,14 @@ function Commander(args){
 		var that = commander;
 
 		that.main.player.previous();
+	}
+
+	function playURI(uri){
+		var that = commander;
+		
+		that.main.models.Track.fromURI(uri, function(track){
+			that.main.player.play(track);
+		});
 	}
 
 
