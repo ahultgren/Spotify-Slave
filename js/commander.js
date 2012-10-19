@@ -29,12 +29,16 @@ function Commander(args){
 	/* Actions */
 
 	Commander.prototype.commands = {
-		playpause: playpause
+		playpause: playpause,
+		'next track': next,
+		'previous track': previous
 	};
 
 	var commander = new Commander(args);
 
 	/* Private functions */
+
+	/* Commands */
 
 	function playpause(){
 		var that = commander,
@@ -48,6 +52,21 @@ function Commander(args){
 			player.playing = true;
 		}
 	}
+
+	function next(){
+		var that = commander;
+
+		that.main.player.next();
+	}
+
+	function previous(){
+		var that = commander;
+
+		that.main.player.previous();
+	}
+
+
+	/* Ensure that there's actually a context before trying to play */
 
 	function ensureContext(){
 		var that = commander,
