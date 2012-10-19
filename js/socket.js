@@ -3,7 +3,7 @@ function Socket(args){
 		var that = this;
 
 		that.io = args.io;
-		that.commander = args.commander;
+		that.main = args.main;
 		that.socket;
 	}
 
@@ -17,7 +17,7 @@ function Socket(args){
 		});
 
 		that.socket.on('ask', function(data){
-			that.commander.do(data.commands, function(current){
+			that.main.commander.do(data.commands, function(current){
 				that.update(current);
 			});
 		});
@@ -25,6 +25,7 @@ function Socket(args){
 
 	Socket.prototype.update = function(current) {
 		var that = this;
+		
 		that.socket.emit('update', current);
 	};
 

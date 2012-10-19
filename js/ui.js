@@ -8,7 +8,6 @@ function UI(args){
 		var that = this;
 
 		that.main = args.main;
-		that.socket = args.main.socket;
 
 		// Private subcontrollers
 		connect = new Connect(that);
@@ -24,7 +23,7 @@ function UI(args){
 		var that = this;
 
 		that.ui = ui;
-		that.socket = ui.socket;
+		that.socket = ui.main.socket;
 
 		that.initialize();
 	}

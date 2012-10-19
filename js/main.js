@@ -17,7 +17,7 @@ function Main(){
 
 		that.socket = Socket({
 			io: io,
-			commander: that.commander
+			main: that
 		});
 
 		that.ui = UI({
