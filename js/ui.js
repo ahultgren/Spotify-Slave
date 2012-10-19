@@ -121,6 +121,10 @@ function UI(args){
 				// Do nothing, Toplist is too unreliable
 			break;
 		}
+
+		if( playlist.tracks.length ){
+			that.ui.main.player.context = playlist;
+		}
 	};
 
 	Drop.prototype.dropInZone = function() {

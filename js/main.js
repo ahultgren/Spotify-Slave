@@ -6,7 +6,7 @@ function Main(args){
 		that.models = sp.require("sp://import/scripts/api/models");
 		that.views = sp.require("sp://import/scripts/api/views");
 		that.ui = sp.require("sp://import/scripts/ui");
-		that.player = new that.views.Player();
+		that.player = that.models.player;
 		that.playlist = new that.models.Playlist();
 		that.app = that.models.application;
 

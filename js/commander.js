@@ -44,11 +44,11 @@ function Commander(args){
 		var that = commander;
 
 		if( that.player.playing ){
-			that.player.playing = 0;
+			that.player.playing = false;
 		}
 		else {
 			ensureContext();
-			that.player.playing = 1;
+			that.player.playing = true;
 		}
 	}
 
