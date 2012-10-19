@@ -2,11 +2,7 @@ function Commander(args){
 	function Commander(args){
 		var that = this;
 
-		that.sp = args.sp;
-		that.player = args.player;
-		that.playlist = args.playlist;
-		that.models = args.models;
-		that.app = args.app;
+		that.main = args.main;
 	}
 
 	Commander.prototype.do = function(commands, update) {
@@ -41,31 +37,31 @@ function Commander(args){
 	/* Private functions */
 
 	function playpause(){
-		var that = commander;
+		var that = commander,
+			player = that.main.player;
 
-		if( that.player.playing ){
-			that.player.playing = false;
+		if( player.playing ){
+			player.playing = false;
 		}
 		else {
 			ensureContext();
-			that.player.playing = true;
+			player.playing = true;
 		}
 	}
 
 	function ensureContext(){
-		var that = commander, 
-			playlist, tracks, track, position,
-			tp = that.sp.trackPlayer,
-			models = that.models;
+		var that = commander,
+			player = that.main.player,
+			playlist = that.main.playlist,
+			trackPlayer = that.main.sp.trackPlayer,
+			models = that.main.models,
+			tracks, track, position;
 
-		if( !that.player.context ){
-			// Use this app's playlist
-			playlist = that.playlist;
-
+		if( !player.context ){
 			// Make sure the playlist is not empty
 			if( !playlist.length ){
 				// Try to fetch the currently playing track
-				if( track = tp.getNowPlayingTrack() ){
+				if( track = trackPlayer.getNowPlayingTrack() ){
 					position = track.position;
 					track = track.track.uri;
 				}
@@ -79,7 +75,7 @@ function Commander(args){
 			}
 
 			// Set context
-			that.player.context = playlist;
+			player.context = playlist;
 
 			// Set position as soon as the song has started playing
 			position && models.player.observe(models.EVENT.CHANGE, function observePlay(e){
@@ -88,9 +84,9 @@ function Commander(args){
 
 					// Seek until it obeys!
 					(function seek(){
-						tp.seek(position);
+						trackPlayer.seek(position);
 
-						if( position - tp.getNowPlayingTrack().position > 1000 ){
+						if( position - trackPlayer.getNowPlayingTrack().position > 1000 ){
 							setTimeout(seek, 5);
 						}
 					}());
