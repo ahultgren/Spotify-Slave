@@ -83,7 +83,6 @@ function Commander(args){
 		var that = commander,
 			player = that.main.player,
 			playlist = that.main.playlist,
-			trackPlayer = that.main.sp.trackPlayer,
 			models = that.main.models,
 			tracks, track, position;
 
@@ -91,9 +90,9 @@ function Commander(args){
 			// Make sure the playlist is not empty
 			if( !playlist.length ){
 				// Try to fetch the currently playing track
-				if( track = trackPlayer.getNowPlayingTrack() ){
-					position = track.position;
-					track = track.track.uri;
+				if( track = player.track ){
+					position = player.position;
+					track = track.data.uri;
 				}
 				else {
 					// Get a random track from the user
@@ -114,9 +113,9 @@ function Commander(args){
 
 					// Seek until it obeys!
 					(function seek(){
-						trackPlayer.seek(position);
+						player.position = position;
 
-						if( position - trackPlayer.getNowPlayingTrack().position > 1000 ){
+						if( position - player.position > 1000 ){
 							setTimeout(seek, 5);
 						}
 					}());
