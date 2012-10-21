@@ -1,7 +1,7 @@
 function Main(){
 	function Main(){
 		var that = this,
-			sp = that.sp = getSpotifyApi(1);
+			sp = getSpotifyApi(1);
 
 		that.models = sp.require("sp://import/scripts/api/models");
 		that.views = sp.require("sp://import/scripts/api/views");
