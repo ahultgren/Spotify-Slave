@@ -20,6 +20,8 @@ function Main(){
 			main: that
 		});
 
+		that.observer = Observer(that);
+
 		that.ui = UI({
 			main: that
 		});
