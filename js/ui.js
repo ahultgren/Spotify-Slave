@@ -8,7 +8,6 @@ function UI(args){
 		var that = this;
 
 		that.main = args.main;
-		that.socket = args.main.socket;
 
 		// Private subcontrollers
 		connect = new Connect(that);
@@ -24,7 +23,7 @@ function UI(args){
 		var that = this;
 
 		that.ui = ui;
-		that.socket = ui.socket;
+		that.socket = ui.main.socket;
 
 		that.initialize();
 	}
@@ -120,6 +119,10 @@ function UI(args){
 			case 10:
 				// Do nothing, Toplist is too unreliable
 			break;
+		}
+
+		if( playlist.tracks.length ){
+			that.ui.main.player.context = playlist;
 		}
 	};
 

@@ -1,7 +1,7 @@
 {
 	"BundleType": "Application",
 	"BundleIdentifier": "slave",
-	"BundleVersion": "0.2.0",
+	"BundleVersion": "0.3.0",
 	"AcceptedLinkTypes":[
 		"album",
 		"artist",

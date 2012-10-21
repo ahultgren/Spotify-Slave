@@ -2,11 +2,7 @@ function Commander(args){
 	function Commander(args){
 		var that = this;
 
-		that.sp = args.sp;
-		that.player = args.player;
-		that.playlist = args.playlist;
-		that.models = args.models;
-		that.app = args.app;
+		that.main = args.main;
 	}
 
 	Commander.prototype.do = function(commands, update) {
@@ -25,6 +21,9 @@ function Commander(args){
 				}
 				else {
 					//## Figure out what the command is about and route accordingly
+					if( !commands[i].indexOf('play track ') ){
+						playURI(commands[i].substring(12, commands[i].length - 1));
+					}
 				}
 			}
 		}
@@ -33,70 +32,47 @@ function Commander(args){
 	/* Actions */
 
 	Commander.prototype.commands = {
-		playpause: playpause
+		playpause: playpause,
+		'next track': next,
+		'previous track': previous
 	};
 
 	var commander = new Commander(args);
 
 	/* Private functions */
 
-	function playpause(){
-		var that = commander;
+	/* Commands */
 
-		if( that.player.playing ){
-			that.player.playing = 0;
+	function playpause(){
+		var that = commander,
+			player = that.main.player;
+
+		if( player.playing ){
+			player.playing = false;
 		}
 		else {
-			ensureContext();
-			that.player.playing = 1;
+			player.playing = true;
 		}
 	}
 
-	function ensureContext(){
-		var that = commander, 
-			playlist, tracks, track, position,
-			tp = that.sp.trackPlayer,
-			models = that.models;
+	function next(){
+		var that = commander;
 
-		if( !that.player.context ){
-			// Use this app's playlist
-			playlist = that.playlist;
+		that.main.player.next();
+	}
 
-			// Make sure the playlist is not empty
-			if( !playlist.length ){
-				// Try to fetch the currently playing track
-				if( track = tp.getNowPlayingTrack() ){
-					position = track.position;
-					track = track.track.uri;
-				}
-				else {
-					// Get a random track from the user
-					track = models.library.tracks[~~(Math.random() * models.library.tracks.length)];
-				}
+	function previous(){
+		var that = commander;
 
-				// Add track to playlist
-				playlist.add(track);
-			}
+		that.main.player.previous();
+	}
 
-			// Set context
-			that.player.context = playlist;
-
-			// Set position as soon as the song has started playing
-			position && models.player.observe(models.EVENT.CHANGE, function observePlay(e){
-				if( e.data.playstate === true ){
-					models.player.ignore(models.EVENT.CHANGE, observePlay);
-
-					// Seek until it obeys!
-					(function seek(){
-						tp.seek(position);
-
-						if( position - tp.getNowPlayingTrack().position > 1000 ){
-							setTimeout(seek, 5);
-						}
-					}());
-				}
-			});
-		}
+	function playURI(uri){
+		var that = commander;
+		
+		that.main.models.Track.fromURI(uri, function(track){
+			that.main.player.play(track);
+		});
 	}
 
 	return commander;

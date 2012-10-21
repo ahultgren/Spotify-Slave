@@ -3,7 +3,7 @@ function Socket(args){
 		var that = this;
 
 		that.io = args.io;
-		that.commander = args.commander;
+		that.main = args.main;
 		that.socket;
 	}
 
@@ -14,18 +14,46 @@ function Socket(args){
 
 		that.socket.on('connect', function () {
 			console.log('Successfully connected as slave');
+
+			that.update();
 		});
 
 		that.socket.on('ask', function(data){
-			that.commander.do(data.commands, function(current){
-				that.update(current);
-			});
+			that.main.commander.do(data.commands);
+		});
+
+		that.socket.on('refresh', function(data){
+			that.update()
 		});
 	};
 
-	Socket.prototype.update = function(current) {
+	Socket.prototype.update = function() {
+		var that = this,
+			player = that.main.player,
+			artists = [];
+
+		player.track.artists.forEach(function(artist){
+			artists.push(artist.name);
+		});
+
+		that.change({
+			state: player.playing,
+			track: player.track.name,
+			artists: artists,
+			album: player.track.album.name,
+			cover: player.track.album.data.cover,
+			volume: ~~(player.volume * 100),
+			uri: player.track.uri,
+			position: player.position,
+			repeat: player.repeat,
+			shuffle: player.shuffle
+		});
+	};
+
+	Socket.prototype.change = function(changed) {
 		var that = this;
-		that.socket.emit('update', current);
+
+		that.socket.emit('change', changed);
 	};
 
 	var socket = new Socket(args);
