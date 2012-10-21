@@ -51,7 +51,6 @@ function Commander(args){
 			player.playing = false;
 		}
 		else {
-			ensureContext();
 			player.playing = true;
 		}
 	}
@@ -74,54 +73,6 @@ function Commander(args){
 		that.main.models.Track.fromURI(uri, function(track){
 			that.main.player.play(track);
 		});
-	}
-
-
-	/* Ensure that there's actually a context before trying to play */
-
-	function ensureContext(){
-		var that = commander,
-			player = that.main.player,
-			playlist = that.main.playlist,
-			models = that.main.models,
-			tracks, track, position;
-
-		if( !player.context ){
-			// Make sure the playlist is not empty
-			if( !playlist.length ){
-				// Try to fetch the currently playing track
-				if( track = player.track ){
-					position = player.position;
-					track = track.data.uri;
-				}
-				else {
-					// Get a random track from the user
-					track = models.library.tracks[~~(Math.random() * models.library.tracks.length)];
-				}
-
-				// Add track to playlist
-				playlist.add(track);
-			}
-
-			// Set context
-			player.context = playlist;
-
-			// Set position as soon as the song has started playing
-			position && models.player.observe(models.EVENT.CHANGE, function observePlay(e){
-				if( e.data.playstate === true ){
-					models.player.ignore(models.EVENT.CHANGE, observePlay);
-
-					// Seek until it obeys!
-					(function seek(){
-						player.position = position;
-
-						if( position - player.position > 1000 ){
-							setTimeout(seek, 5);
-						}
-					}());
-				}
-			});
-		}
 	}
 
 	return commander;
