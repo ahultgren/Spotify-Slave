@@ -14,7 +14,7 @@ function Observer(main){
 			player = that.main.player;
 
 		that.main.player.observe(main.models.EVENT.CHANGE, function(e){
-			var changed = {};
+			var changed = {}, i;
 
 			if( e.data.curtrack ){
 				changed.track = player.track.name;
@@ -25,9 +25,9 @@ function Observer(main){
 
 				changed.artists = [];
 
-				player.track.artists.forEach(function(artist){
-					changed.artist.push(artist.name);
-				});
+				for( i = player.track.artists.length; i--; ){
+					changed.artists.push(player.track.artists[i].name);
+				}
 			}
 
 			if( e.data.playstate ){
