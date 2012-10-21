@@ -14,6 +14,8 @@ function Socket(args){
 
 		that.socket.on('connect', function () {
 			console.log('Successfully connected as slave');
+
+			that.update();
 		});
 
 		that.socket.on('ask', function(data){
@@ -21,15 +23,30 @@ function Socket(args){
 		});
 	};
 
-	Socket.prototype.update = function(current) {
-		var that = this;
-		
-		that.socket.emit('update', current);
+	Socket.prototype.update = function() {
+		var that = this,
+			player = that.main.player,
+			artists = [];
+
+		player.track.artists.forEach(function(artist){
+			artists.push(artist.name);
+		});
+
+		that.change({
+			state: player.playing,
+			track: player.track.name,
+			artists: artists,
+			album: player.track.album.name,
+			cover: player.track.album.data.cover,
+			volume: ~~(player.volume * 100),
+			uri: player.track.uri,
+			position: player.position
+		});
 	};
 
 	Socket.prototype.change = function(changed) {
 		var that = this;
-		
+
 		that.socket.emit('change', changed);
 	};
 
