@@ -5,7 +5,7 @@ function Observer(main){
 		that.main = main;
 		that.player = main.observer;
 		that.socket = main.socket;
-console.log("MJAU");
+
 		that.observe();
 	}
 
@@ -36,6 +36,14 @@ console.log("MJAU");
 
 			if( e.data.volume ){
 				changed.volume = Math.round(player.volume * 100);
+			}
+
+			if( e.data.shuffle ){
+				changed.shuffle = player.shuffle;
+			}
+
+			if( e.data.repeat ){
+				changed.repeat = player.repeat;
 			}
 
 			// Since there's no way to detect change in position, always send it
