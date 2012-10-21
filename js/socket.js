@@ -21,6 +21,10 @@ function Socket(args){
 		that.socket.on('ask', function(data){
 			that.main.commander.do(data.commands);
 		});
+
+		that.socket.on('refresh', function(data){
+			that.update()
+		});
 	};
 
 	Socket.prototype.update = function() {
