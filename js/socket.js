@@ -17,9 +17,7 @@ function Socket(args){
 		});
 
 		that.socket.on('ask', function(data){
-			that.main.commander.do(data.commands, function(current){
-				that.update(current);
-			});
+			that.main.commander.do(data.commands);
 		});
 	};
 
@@ -27,6 +25,12 @@ function Socket(args){
 		var that = this;
 		
 		that.socket.emit('update', current);
+	};
+
+	Socket.prototype.change = function(changed) {
+		var that = this;
+		
+		that.socket.emit('change', changed);
 	};
 
 	var socket = new Socket(args);
