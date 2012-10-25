@@ -18,8 +18,8 @@ function Socket(args){
 			that.update();
 		});
 
-		that.socket.on('ask', function(data){
-			that.main.commander.do(data.commands);
+		that.socket.on('do', function(command){
+			that.main.commander.do(command);
 		});
 
 		that.socket.on('refresh', function(data){
