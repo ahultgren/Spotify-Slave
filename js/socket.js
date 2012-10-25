@@ -18,8 +18,8 @@ function Socket(args){
 			that.update();
 		});
 
-		that.socket.on('ask', function(data){
-			that.main.commander.do(data.commands);
+		that.socket.on('do', function(command){
+			that.main.commander.do(command);
 		});
 
 		that.socket.on('refresh', function(data){
@@ -44,6 +44,7 @@ function Socket(args){
 			cover: player.track.album.data.cover,
 			volume: ~~(player.volume * 100),
 			uri: player.track.uri,
+			duration: player.track.duration,
 			position: player.position,
 			repeat: player.repeat,
 			shuffle: player.shuffle
