@@ -21,6 +21,7 @@ function Observer(main){
 				changed.album = player.track.album.name;
 				changed.cover = player.track.album.data.cover;
 				changed.uri = player.track.uri;
+				changed.duration = player.track.duration;
 				changed.position = 0;
 
 				changed.artists = [];

@@ -44,6 +44,7 @@ function Socket(args){
 			cover: player.track.album.data.cover,
 			volume: ~~(player.volume * 100),
 			uri: player.track.uri,
+			duration: player.track.duration,
 			position: player.position,
 			repeat: player.repeat,
 			shuffle: player.shuffle
