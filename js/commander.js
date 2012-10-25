@@ -5,28 +5,10 @@ function Commander(args){
 		that.main = args.main;
 	}
 
-	Commander.prototype.do = function(commands, update) {
-		var that = this,
-			i, l;
+	Commander.prototype.do = function(command) {
+		var that = this;
 
-		for( i = 0, l = commands.length; i < l; i++ ){
-			// The callback is only used when fresh data is wanted
-			if( commands[i] === 'current' ){
-				//## that.update(update);
-			}
-			else {
-				// Takes care of all 'static' commands like playpause, name of track, name of artist, next etc
-				if( that.commands[commands[i]] ){
-					that.commands[commands[i]]();
-				}
-				else {
-					//## Figure out what the command is about and route accordingly
-					if( !commands[i].indexOf('play track ') ){
-						playURI(commands[i].substring(12, commands[i].length - 1));
-					}
-				}
-			}
-		}
+		that.commands[command.command] && that.commands[command.command](command);
 	};
 
 	/* Actions */
