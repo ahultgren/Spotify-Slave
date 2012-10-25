@@ -15,8 +15,8 @@ function Commander(args){
 
 	Commander.prototype.commands = {
 		playpause: playpause,
-		'next track': next,
-		'previous track': previous
+		next: next,
+		prev: previous
 	};
 
 	var commander = new Commander(args);
