@@ -16,7 +16,8 @@ function Commander(args){
 	Commander.prototype.commands = {
 		playpause: playpause,
 		next: next,
-		prev: previous
+		prev: previous,
+		playURI: playURI
 	};
 
 	var commander = new Commander(args);
@@ -49,12 +50,14 @@ function Commander(args){
 		that.main.player.previous();
 	}
 
-	function playURI(uri){
+	function playURI(command){
 		var that = commander;
-		
-		that.main.models.Track.fromURI(uri, function(track){
-			that.main.player.play(track);
-		});
+
+		if( command.values.length ){
+			that.main.models.Track.fromURI(command.values[0], function(track){
+				that.main.player.play(track, command.values[1]);
+			});
+		}
 	}
 
 	return commander;
