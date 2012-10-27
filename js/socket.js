@@ -23,7 +23,7 @@ function Socket(args){
 		});
 
 		that.socket.on('refresh', function(data){
-			that.update()
+			that.update();
 		});
 	};
 
@@ -32,23 +32,30 @@ function Socket(args){
 			player = that.main.player,
 			artists = [];
 
-		player.track.artists.forEach(function(artist){
-			artists.push(artist.name);
-		});
+		if( player.track ){
+			player.track.artists.forEach(function(artist){
+				artists.push(artist.name);
+			});
 
-		that.change({
-			state: player.playing,
-			track: player.track.name,
-			artists: artists,
-			album: player.track.album.name,
-			cover: player.track.album.data.cover,
-			volume: ~~(player.volume * 100),
-			uri: player.track.uri,
-			duration: player.track.duration,
-			position: player.position,
-			repeat: player.repeat,
-			shuffle: player.shuffle
-		});
+			that.change({
+				state: player.playing,
+				track: player.track.name,
+				artists: artists,
+				album: player.track.album.name,
+				cover: player.track.album.data.cover,
+				volume: ~~(player.volume * 100),
+				uri: player.track.uri,
+				duration: player.track.duration,
+				position: player.position,
+				repeat: player.repeat,
+				shuffle: player.shuffle
+			});
+		}
+		else {
+			that.change({
+				position: null
+			});
+		}
 	};
 
 	Socket.prototype.change = function(changed) {
