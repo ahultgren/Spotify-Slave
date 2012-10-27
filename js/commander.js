@@ -17,7 +17,8 @@ function Commander(args){
 		playpause: playpause,
 		next: next,
 		prev: previous,
-		playURI: playURI
+		playURI: playURI,
+		set: set
 	};
 
 	var commander = new Commander(args);
@@ -57,6 +58,26 @@ function Commander(args){
 			that.main.models.Track.fromURI(command.values[0], function(track){
 				that.main.player.play(track, command.values[1]);
 			});
+		}
+	}
+
+	function set(command){
+		var that = commander,
+			property = command.values[0],
+			value = command.values[1];
+
+		if( property === 'position' ){
+			that.main.player.position = value * 1000;
+			console.log(value * 1000, that.main.player.position);
+		}
+		else if( property === 'volume' ){
+			that.main.player.volume = value/100;
+		}
+		else if( property === 'repeat' || property === 'shuffle' ){
+			that.main.player[property] = !!value;
+		}
+		else if( property === 'state' ){
+			that.main.player.playing = value;
 		}
 	}
 
