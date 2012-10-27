@@ -3,6 +3,9 @@ function Commander(args){
 		var that = this;
 
 		that.main = args.main;
+		that.queue = Queuer({
+			commander: that
+		});
 	}
 
 	Commander.prototype.do = function(command) {
@@ -18,7 +21,8 @@ function Commander(args){
 		next: next,
 		prev: previous,
 		playURI: playURI,
-		set: set
+		set: set,
+		queue: queue
 	};
 
 	var commander = new Commander(args);
@@ -79,6 +83,47 @@ function Commander(args){
 		else if( property === 'state' ){
 			that.main.player.playing = value;
 		}
+	}
+
+	function queue(command){
+		commander.queue.add(command.values[0]);
+	}
+
+	function Queuer(args){
+		function Queuer(args){
+			var that = this,
+				commander = that.commander = args.commander,
+				lastTrack,
+				main = that.commander.main,
+				player = main.player,
+				models = main.models,
+				playlist = main.playlist;
+
+			// Listen for track ending and change to apps playlist if it's not empty
+			player.observe(models.EVENT.CHANGE, function observer(e){
+				if( e.data.curtrack && !player.context && playlist.length ){
+					player.play(playlist.get(0), playlist);
+
+					//## This observer needs to be removed to not repeat the play queue, but how to add it again?
+					player.ignore(models.EVENT.CHANGE, observer);
+				}
+			});
+		}
+
+		Queuer.prototype.add = function(uri) {
+			var that = this,
+				main = that.commander.main,
+				player = main.player,
+				models = main.models,
+				playlist = main.playlist;
+
+			// Load track
+			models.Track.fromURI(uri, function(track){
+				playlist.add(track);
+			});
+		};
+
+		return new Queuer(args);
 	}
 
 	return commander;
