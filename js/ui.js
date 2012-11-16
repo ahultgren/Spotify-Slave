@@ -1,5 +1,5 @@
 function UI(args){
-	var ui, connect, drop;
+	var ui, connect, drop, admin;
 
 	/* UI
 	 * Controller for everything in the UI
@@ -13,6 +13,7 @@ function UI(args){
 		connect = new Connect(that);
 		drop = new Drop(that);
 		playlist = new Playlist(that);
+		admin = new Admin(that);
 	}
 
 
@@ -35,9 +36,29 @@ function UI(args){
 
 		// Wait until the user has selected a url
 		$('#connectButton').click(function(){
-			that.socket.connect(url.val() + '?token=' + token.val());
+			that.socket.connect(url.val() + '?token=' + token.val(), $('#admin-token').val());
 		});
 	};
+
+	/* Admin
+	 * Controls whether or not admin mode is on 
+	 */
+	function Admin(ui){
+		var that = this,
+			token = $('#admin-token'),
+			toggle = $('#admin-toggle');
+
+		that.ui = ui;
+
+		toggle.click(function(){
+			if( $(this).is(':checked') ){
+				that.ui.main.socket.setAdminMode(token.val());
+			}
+			else {
+				that.ui.main.socket.setAdminMode();
+			}
+		});
+	}
 
 
 	/* Drop

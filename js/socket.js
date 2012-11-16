@@ -7,7 +7,7 @@ function Socket(args){
 		that.socket;
 	}
 
-	Socket.prototype.connect = function(url) {
+	Socket.prototype.connect = function(url, adminToken) {
 		var that = this;
 		
 		that.socket = io.connect(url);
@@ -16,6 +16,12 @@ function Socket(args){
 			console.log('Successfully connected as slave');
 
 			that.update();
+
+			if( adminToken ){
+				that.setAdminMode(adminToken);
+				// To prevent resetting password on reconnect
+				adminToken = undefined;
+			}
 		});
 
 		that.socket.on('do', function(command){
@@ -62,6 +68,10 @@ function Socket(args){
 		var that = this;
 
 		that.socket.emit('change', changed);
+	};
+
+	Socket.prototype.setAdminMode = function(token) {
+		this.socket && this.socket.emit('auth', token);
 	};
 
 	var socket = new Socket(args);
