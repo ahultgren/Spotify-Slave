@@ -17,17 +17,22 @@ function Observer(main){
 			var changed = {}, i;
 
 			if( e.data.curtrack ){
-				changed.track = player.track.name;
-				changed.album = player.track.album.name;
-				changed.cover = player.track.album.data.cover;
-				changed.uri = player.track.uri;
-				changed.duration = player.track.duration;
-				changed.position = 0;
+				if( player.track ){
+					changed.track = player.track.name;
+					changed.album = player.track.album.name;
+					changed.cover = player.track.album.data.cover;
+					changed.uri = player.track.uri;
+					changed.duration = player.track.duration;
+					changed.position = 0;
 
-				changed.artists = [];
+					changed.artists = [];
 
-				for( i = player.track.artists.length; i--; ){
-					changed.artists.push(player.track.artists[i].name);
+					for( i = player.track.artists.length; i--; ){
+						changed.artists.push(player.track.artists[i].name);
+					}
+				}
+				else {
+					changed.position = null;
 				}
 			}
 

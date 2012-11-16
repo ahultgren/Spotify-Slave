@@ -2,7 +2,19 @@
 
 Turn your Spotify player into a slave of your peers' will. Just connect to an instance of [Spotify Server](https://github.com/ahultgren/Spotify-Server) and anyone with access to the server can controll your Spotify player. On any OS.
 
-Currently (version 0.3) there's not much of a GUI or features, but more will come!
+
+## Features
+Through the web api (aka Spotify Server, see link above) you can let users:
+
+* See what's playing (name, artists, album, duration, player state, player position, and whether shuffling or repeating or not)
+* Play or pause
+* Play a specific track by URI
+* Play a specific track in a specific playlist
+* Play previous/next track
+* Queue tracks
+* Set volume (though currently not allowed in Spotify API) and position
+
+Directly in Spotify Slave you can't to much more than connect to the Spotify Server and choose some initial songs. But eventually more features will come, such as being able to constrain what your users can do, see who's connected, talk to them or something. The specs are not written in stone atm, so please let me know of your ideas!
 
 ## Installation
 
