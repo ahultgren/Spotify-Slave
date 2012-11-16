@@ -7,3 +7,7 @@
 	font-size:16px;
 	margin-bottom:10px;
 }
+
+#admin-toggle {
+	-webkit-appearance: checkbox;
+}
