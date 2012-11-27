@@ -7,29 +7,39 @@ function Socket(args){
 		that.socket;
 	}
 
-	Socket.prototype.connect = function(url, adminToken) {
-		var that = this;
-		
-		that.socket = io.connect(url);
+	Socket.prototype.connect = function(server, namespace, adminToken) {
+		var that = this,
+			slaveToken = (Math.random()*0xFFFFFFFFFFFFFFFFFFFF).toString(36),
+			httpPath = server + '/' + namespace,
+			socketPath = httpPath + '_slave?token=' + slaveToken;
 
-		that.socket.on('connect', function () {
-			console.log('Successfully connected as slave');
-
-			that.update();
-
-			if( adminToken ){
-				that.setAdminMode(adminToken);
-				// To prevent resetting password on reconnect
-				adminToken = undefined;
+		$.ajax({
+			url: httpPath,
+			type: 'POST',
+			data: {
+				slaveToken: slaveToken,
+				adminToken: adminToken || undefined
 			}
-		});
+		})
+		.done(function(){
+			that.socket = io.connect(socketPath);
 
-		that.socket.on('do', function(command){
-			that.main.commander.do(command);
-		});
+			that.socket.on('connect', function () {
+				console.log('Successfully connected as slave');
 
-		that.socket.on('refresh', function(data){
-			that.update();
+				that.update();
+			});
+
+			that.socket.on('do', function(command){
+				that.main.commander.do(command);
+			});
+
+			that.socket.on('refresh', function(data){
+				that.update();
+			});
+		})
+		.fail(function(){
+
 		});
 	};
 

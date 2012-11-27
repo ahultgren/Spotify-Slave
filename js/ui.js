@@ -32,11 +32,12 @@ function UI(args){
 	Connect.prototype.initialize = function() {
 		var that = this,
 			url = $('#url'),
+			namespace = $('#namespace'),
 			token = $('#token');
 
 		// Wait until the user has selected a url
 		$('#connectButton').click(function(){
-			that.socket.connect(url.val() + '?token=' + token.val(), $('#admin-token').val());
+			that.socket.connect(url.val(), namespace.val(), $('#admin-toggle').is(':checked') && $('#admin-token').val() || undefined);
 		});
 	};
 
