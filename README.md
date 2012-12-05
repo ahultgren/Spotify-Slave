@@ -19,7 +19,7 @@ Directly in Spotify Slave you can't to much more than connect to the Spotify Ser
 ## Installation
 
 * Clone this repo  
-    `$ git clone git://github.com/ahultgren/Spotify-Server.git`
+    `$ git clone git://github.com/ahultgren/Spotify-Slave.git`
 * Move the directory to ~/Spotify on OSX or /Users/username/Spotify on Windows (I have absolutely no clue where to put this stuff on linux, but chances are if you're a linux user you know how to figure it out).  
     `$ mv Spotify-Slave ~/Spotify/spotify-slave`
 * Get yourself a [developer account](https://developer.spotify.com/technologies/apps/#developer-account) (you must have **Spotify Premium**)
