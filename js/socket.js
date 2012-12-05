@@ -7,23 +7,39 @@ function Socket(args){
 		that.socket;
 	}
 
-	Socket.prototype.connect = function(url) {
-		var that = this;
-		
-		that.socket = io.connect(url);
+	Socket.prototype.connect = function(server, namespace, adminToken) {
+		var that = this,
+			slaveToken = (Math.random()*0xFFFFFFFFFFFFFFFFFFFF).toString(36),
+			httpPath = server + '/' + namespace,
+			socketPath = httpPath + '_slave?token=' + slaveToken;
 
-		that.socket.on('connect', function () {
-			console.log('Successfully connected as slave');
+		$.ajax({
+			url: httpPath,
+			type: 'POST',
+			data: {
+				slaveToken: slaveToken,
+				adminToken: adminToken || undefined
+			}
+		})
+		.done(function(){
+			that.socket = io.connect(socketPath);
 
-			that.update();
-		});
+			that.socket.on('connect', function () {
+				console.log('Successfully connected as slave');
 
-		that.socket.on('do', function(command){
-			that.main.commander.do(command);
-		});
+				that.update();
+			});
 
-		that.socket.on('refresh', function(data){
-			that.update();
+			that.socket.on('do', function(command){
+				that.main.commander.do(command);
+			});
+
+			that.socket.on('refresh', function(data){
+				that.update();
+			});
+		})
+		.fail(function(){
+
 		});
 	};
 
@@ -62,6 +78,10 @@ function Socket(args){
 		var that = this;
 
 		that.socket.emit('change', changed);
+	};
+
+	Socket.prototype.setAdminMode = function(token) {
+		this.socket && this.socket.emit('auth', token);
 	};
 
 	var socket = new Socket(args);
