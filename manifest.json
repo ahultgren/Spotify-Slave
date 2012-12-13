@@ -1,6 +1,6 @@
 {
 	"BundleType": "Application",
-	"BundleIdentifier": "slave",
+	"BundleIdentifier": "frodj",
 	"BundleVersion": "0.4.0",
 	"AcceptedLinkTypes":[
 		"album",
@@ -13,10 +13,10 @@
 		"18x18": "icon.png"
 	},
 	"AppName": {
-		"en": "Spotify Server Client"
+		"en": "Frodj"
 	},
 	"AppDescription": {
-		"en": "Let Spotify be controlled by a local or remote instance of Spotify Server"
+		"en": "Frodj is for all those occasions when everyone wants a say in what song is played. Let your friends choose what’s played through a web interface, or retain all the power yourself from the comfort of your couch."
 	},
 	"SupportedLanguages": [
 		"en"
