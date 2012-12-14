@@ -33,7 +33,14 @@ function UI(args){
 		var that = this,
 			url = $('#url'),
 			namespace = $('#namespace'),
-			token = $('#token');
+			token = $('#token'),
+			link = $('#room-href');
+
+		// Generate external link to room
+		$.merge(url, namespace).on('keyup', function(){
+			link.attr('href', url.val() + '/' + namespace.val());
+			link.text(url.val() + '/' + namespace.val());
+		});
 
 		// Wait until the user has selected a url
 		$('#connectButton').click(function(){
