@@ -25,7 +25,6 @@
 	<p>
 		<input type="text" class="input" id="url" value="http://frodj.me" />
 		<input type="text" class="input" id="namespace" value="room_name" />
-		<a href="http://frodj.me/room_name" id="room-href">http://frodj.me/room_name</a>
 	</p>
 	<p>
 		<label for="admin-togle">Allow only admins to change track: </label>
@@ -33,6 +32,9 @@
 		<input type="password" class="input" id="admin-token" placeholder="Password" />
 	</p>
 	<button class="sp-button" id="connectButton">Connect to server</button>
+	<p class="success" id="connect-success">You are connected. Visit your player at: <a href="http://frodj.me/room_name" id="room-href">http://frodj.me/room_name</a></p>
+	<p class="error" id="connect-error">Something went wrong. Perhaps try another room name?</p>
+
 	<div id="dropzone">Drag and drop something here!</div>
 </body>
 </html>
