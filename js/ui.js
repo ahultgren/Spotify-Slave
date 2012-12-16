@@ -47,7 +47,7 @@ function UI(args){
 		// Wait until the user has selected a url
 		connectButton.click(function(){
 			feedback.hideAll();
-			connectButton.prop('disabled', true);
+			$.merge(connectButton, url, namespace).prop('disabled', true);
 
 			that.socket.connect(url.val(), namespace.val(), $('#admin-toggle').is(':checked') && $('#admin-token').val() || undefined)
 				.done(function(){
