@@ -11,3 +11,14 @@
 #admin-toggle {
 	-webkit-appearance: checkbox;
 }
+
+p {
+	overflow: hidden;
+}
+
+
+/* Feedback */
+.error,
+.success {
+	display: none;
+}

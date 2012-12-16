@@ -1,5 +1,5 @@
 function UI(args){
-	var ui, connect, drop, admin;
+	var ui, connect, drop, admin, feedback;
 
 	/* UI
 	 * Controller for everything in the UI
@@ -14,6 +14,7 @@ function UI(args){
 		drop = new Drop(that);
 		playlist = new Playlist(that);
 		admin = new Admin(that);
+		feedback = new Feedback(that);
 	}
 
 
@@ -45,14 +46,16 @@ function UI(args){
 
 		// Wait until the user has selected a url
 		connectButton.click(function(){
+			feedback.hideAll();
 			connectButton.prop('disabled', true);
 
 			that.socket.connect(url.val(), namespace.val(), $('#admin-toggle').is(':checked') && $('#admin-token').val() || undefined)
 				.done(function(){
-
+					feedback.show('connectSuccess');
 				})
 				.fail(function(){
 					connectButton.prop('disabled', false);
+					feedback.show('connectError');
 				});
 		});
 	};
@@ -210,6 +213,45 @@ function UI(args){
 		list = new that.ui.main.views.List(that.ui.main.playlist);
 		document.body.appendChild(list.node);
 	}
+
+
+	/* Feedback
+	 * Takes care of success and error messages
+	 */
+	function Feedback(ui){
+		var that = this;
+
+		that.ui = ui;
+		that.messages = {
+			connectSuccess: $('#connect-success'),
+			connectError: $('#connect-error')
+		};
+	}
+
+	Feedback.prototype.show = function(message) {
+		var messages = this.messages;
+
+		if( messages[message] ){
+			messages[message].show();
+		}
+	};
+
+	Feedback.prototype.hide = function(message) {
+		var messages = this.messages;
+
+		if( messages[message] ){
+			messages[message].hide();
+		}
+	};
+
+	Feedback.prototype.hideAll = function() {
+		var messages = this.messages,
+			i;
+
+		for( i in messages ){
+			messages[i].hide();
+		}
+	};
 
 
 	ui = new UI(args);
