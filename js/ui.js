@@ -34,7 +34,8 @@ function UI(args){
 			url = $('#url'),
 			namespace = $('#namespace'),
 			token = $('#token'),
-			link = $('#room-href');
+			link = $('#room-href'),
+			connectButton = $('#connectButton');
 
 		// Generate external link to room
 		$.merge(url, namespace).on('keyup', function(){
@@ -43,8 +44,16 @@ function UI(args){
 		});
 
 		// Wait until the user has selected a url
-		$('#connectButton').click(function(){
-			that.socket.connect(url.val(), namespace.val(), $('#admin-toggle').is(':checked') && $('#admin-token').val() || undefined);
+		connectButton.click(function(){
+			connectButton.prop('disabled', true);
+
+			that.socket.connect(url.val(), namespace.val(), $('#admin-toggle').is(':checked') && $('#admin-token').val() || undefined)
+				.done(function(){
+
+				})
+				.fail(function(){
+					connectButton.prop('disabled', false);
+				});
 		});
 	};
 

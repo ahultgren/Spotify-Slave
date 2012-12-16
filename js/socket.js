@@ -11,7 +11,8 @@ function Socket(args){
 		var that = this,
 			slaveToken = (Math.random()*0xFFFFFFFFFFFFFFFFFFFF).toString(36),
 			httpPath = server + '/' + namespace,
-			socketPath = httpPath + '_slave?token=' + slaveToken;
+			socketPath = httpPath + '_slave?token=' + slaveToken,
+			promise = $.Deferred();
 
 		$.ajax({
 			url: httpPath,
@@ -26,7 +27,7 @@ function Socket(args){
 
 			that.socket.on('connect', function () {
 				console.log('Successfully connected as slave');
-
+				promise.resolve();
 				that.update();
 			});
 
@@ -38,9 +39,9 @@ function Socket(args){
 				that.update();
 			});
 		})
-		.fail(function(){
+		.fail(promise.reject);
 
-		});
+		return promise.promise();
 	};
 
 	Socket.prototype.update = function() {
