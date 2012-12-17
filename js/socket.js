@@ -85,6 +85,14 @@ function Socket(args){
 		this.socket && this.socket.emit('auth', token);
 	};
 
+	Socket.prototype.disconnect = function() {
+		var that = this;
+
+		that.socket.disconnect();
+		that.io.j = [];
+		that.io.sockets = [];
+	};
+
 	var socket = new Socket(args);
 	return socket;
 }

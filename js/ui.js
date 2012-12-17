@@ -36,7 +36,9 @@ function UI(args){
 			namespace = $('#namespace'),
 			token = $('#token'),
 			link = $('#room-href'),
-			connectButton = $('#connectButton');
+			connectButton = $('#connectButton'),
+			disconnectButton = $('#disconnectButton'),
+			allConnectInputs = $().add(connectButton).add(url).add(namespace);
 
 		// Generate external link to room
 		$.merge(url, namespace).on('keyup', function(){
@@ -47,16 +49,23 @@ function UI(args){
 		// Wait until the user has selected a url
 		connectButton.click(function(){
 			feedback.hideAll();
-			$.merge(connectButton, url, namespace).prop('disabled', true);
+			allConnectInputs.prop('disabled', true);
 
 			that.socket.connect(url.val(), namespace.val(), $('#admin-toggle').is(':checked') && $('#admin-token').val() || undefined)
 				.done(function(){
 					feedback.show('connectSuccess');
+					disconnectButton.prop('disabled', false);
 				})
 				.fail(function(){
-					connectButton.prop('disabled', false);
+					allConnectInputs.prop('disabled', false);
 					feedback.show('connectError');
 				});
+		});
+
+		disconnectButton.click(function(){
+			that.socket.disconnect();
+			allConnectInputs.prop('disabled', false);
+			disconnectButton.prop('disabled', true);
 		});
 	};
 
