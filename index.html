@@ -23,18 +23,20 @@
 		<h1>Frodj</h1>
 	</header>
 	<article id="main">
-		<p>
-			<input type="text" class="input" id="url" value="http://frodj.me" />
-			<input type="text" class="input" id="namespace" value="room_name" />
+		<p class="clearfix">
+			<label class="left" for="url">Room name:</label>
+			<input type="text" class="input right" id="namespace" value="room_name" />
+			<a class="left" href="#">Change server</a>
+			<input type="text" class="input right" id="url" value="http://frodj.me" />
+
+			<label class="left" for="admin-togle">Admin-mode:</label>
+			<input type="checkbox" class="right" id="admin-toggle" />
+			<span class="left"></span>
+			<input type="password" class="input right" id="admin-token" placeholder="Password" />
 		</p>
-		<p>
-			<label for="admin-togle">Allow only admins to change track: </label>
-			<input type="checkbox" id="admin-toggle" />
-			<input type="password" class="input" id="admin-token" placeholder="Password" />
-		</p>
-		<p>
-			<button class="sp-button" id="connectButton">Connect</button>
-			<button class="sp-button" id="disconnectButton" disabled>Disconnect</button>
+		<p class="clearfix">
+			<span class="left"><button class="sp-button" id="connectButton">Connect</button></span>
+			<button class="sp-button right" id="disconnectButton" disabled>Disconnect</button>
 		</p>
 
 		<p class="success" id="connect-success">You are connected. Visit your player at: <a href="http://frodj.me/room_name" id="room-href">http://frodj.me/room_name</a></p>

@@ -11,11 +11,23 @@
 /* General elements */
 
 body {
-	font: 1em/1.6 Helvetica, sans-serif;
+	line-height: 1.5;
 }
 
 p {
-	overflow: hidden;
+	margin: 1em 0;
+}
+
+input[type="text"], input[type="password"] {
+	min-width: 200px;
+}
+
+input[type="checkbox"] {
+	-webkit-appearance: checkbox;
+}
+
+.sp-button:disabled {
+	text-shadow: none;
 }
 
 
@@ -36,10 +48,10 @@ header h1 {
 }
 
 
-/* Connect */
+/* Main */
 
-#admin-toggle {
-	-webkit-appearance: checkbox;
+#main {
+	margin: 2em;
 }
 
 
@@ -72,4 +84,31 @@ header h1 {
 
 .success {
 	color: #37a600;
+}
+
+/* General classes */
+
+.left {
+	float: left;
+	clear: left;
+	min-width: 150px;
+	min-height: 1px;
+}
+
+.right {
+	float: left;
+}
+
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.clearfix {
+    display: inline-block;
+}
+.clearfix {
+    display: block;
 }
