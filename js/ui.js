@@ -220,6 +220,7 @@ function UI(args){
 
 		// Append playlist to DOM
 		list = new that.ui.main.views.List(that.ui.main.playlist);
+		list.node.classList.add("sp-light");
 		document.body.appendChild(list.node);
 	}
 
