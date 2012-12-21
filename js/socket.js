@@ -14,32 +14,37 @@ function Socket(args){
 			socketPath = httpPath + '_slave?token=' + slaveToken,
 			promise = $.Deferred();
 
-		$.ajax({
-			url: httpPath,
-			type: 'POST',
-			data: {
-				slaveToken: slaveToken,
-				adminToken: adminToken || undefined
-			}
-		})
-		.done(function(){
-			that.socket = io.connect(socketPath);
+		if( that.validate(server, namespace) ){
+			$.ajax({
+				url: httpPath,
+				type: 'POST',
+				data: {
+					slaveToken: slaveToken,
+					adminToken: adminToken || undefined
+				}
+			})
+			.done(function(){
+				that.socket = io.connect(socketPath);
 
-			that.socket.on('connect', function () {
-				console.log('Successfully connected as slave');
-				promise.resolve();
-				that.update();
-			});
+				that.socket.on('connect', function () {
+					console.log('Successfully connected as slave');
+					promise.resolve();
+					that.update();
+				});
 
-			that.socket.on('do', function(command){
-				that.main.commander.do(command);
-			});
+				that.socket.on('do', function(command){
+					that.main.commander.do(command);
+				});
 
-			that.socket.on('refresh', function(data){
-				that.update();
-			});
-		})
-		.fail(promise.reject);
+				that.socket.on('refresh', function(data){
+					that.update();
+				});
+			})
+			.fail(promise.reject);
+		}
+		else {
+			promise.reject();
+		}
 
 		return promise.promise();
 	};
@@ -91,6 +96,15 @@ function Socket(args){
 		that.socket.disconnect();
 		that.io.j = [];
 		that.io.sockets = [];
+	};
+
+	Socket.prototype.validate = function(server, namespace) {
+		if( server === '' || server.indexOf('http') || namespace === '' || namespace.indexOf(' ') + 1 || namespace.indexOf('/') + 1 ){
+			return false;
+		}
+		else {
+			return true;
+		}
 	};
 
 	var socket = new Socket(args);
