@@ -168,6 +168,10 @@ footer {
 	padding: 5px;
 }
 
+.sp-list {
+	max-height: none;
+}
+
 .input {
 	margin-top: 0;
 }

@@ -194,6 +194,7 @@ function UI(args){
 
 	Drop.prototype.dropInZone = function() {
 		var that = this,
+			zone = $('.list-box'),
 			drop = $('#dropzone'),
 			defaultColor = drop.css('border-color'),
 			dragColor = '#5c5c5c',
@@ -202,7 +203,7 @@ function UI(args){
 		drop.bind('dragenter', function(e){
 			drop.css('border-color', dragColor);
 		});
-		drop.bind('dragover', function(e){
+		zone.bind('dragover', function(e){
 			e.preventDefault();
 			e.originalEvent.dataTransfer.dropEffect = 'copy';
 			return false;
@@ -210,7 +211,7 @@ function UI(args){
 		drop.bind('dragleave', function(e){
 			drop.css('border-color', defaultColor);
 		});
-		drop.bind('drop', function(e){
+		zone.on('drop', function(e){
 			that.drop(e.originalEvent.dataTransfer.getData('Text'));
 			drop.css('border-color', defaultColor).hide();
 		});
@@ -240,7 +241,8 @@ function UI(args){
 		// Append playlist to DOM
 		list = new that.ui.main.views.List(that.ui.main.playlist);
 		list.node.classList.add("sp-light");
-		document.body.appendChild(list.node);
+		
+		$('.list-box').append(list.node);
 	}
 
 
