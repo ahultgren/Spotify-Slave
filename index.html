@@ -23,19 +23,26 @@
 		<h1>Frodj</h1>
 	</header>
 	<article id="main">
-		<p class="clearfix">
-			<label class="left" for="url">Room name:</label>
+		<p class="clearfix form">
+			<label class="short left" for="url">
+				Room name: <br />
+				<a id="server-toggle" href="#">Change server?</a>
+			</label>
 			<input type="text" class="input right" id="namespace" value="room_name" />
-			<a class="left" href="#">Change server</a>
-			<input type="text" class="input right" id="url" value="http://frodj.me" />
-
+		</p>
+		<p class="clearfix form" id="server-row">
+			<label class="left"></label><input type="text" class="input right" id="url" value="http://frodj.me" />
+		</p>
+		<p class="clearfix form short">
 			<label class="left" for="admin-togle">Admin-mode:</label>
-			<input type="checkbox" class="right" id="admin-toggle" />
-			<span class="left"></span>
+			<span class="right"><input type="checkbox" id="admin-toggle" /></span>
+		</p>
+		<p class="clearfix form short" id="admin-row">
+			<label class="left"></label>
 			<input type="password" class="input right" id="admin-token" placeholder="Password" />
 		</p>
-		<p class="clearfix">
-			<span class="left"><button class="sp-button" id="connectButton">Connect</button></span>
+		<p class="clearfix form">
+			<span class="short left"><button class="sp-button" id="connectButton">Connect</button></span>
 			<button class="sp-button right" id="disconnectButton" disabled>Disconnect</button>
 		</p>
 
