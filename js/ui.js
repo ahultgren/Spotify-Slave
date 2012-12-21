@@ -194,10 +194,13 @@ function UI(args){
 
 	Drop.prototype.dropInZone = function() {
 		var that = this,
-			drop = $('#dropzone');
+			drop = $('#dropzone'),
+			defaultColor = drop.css('border-color'),
+			dragColor = '#5c5c5c',
+			w = $(window);
 
 		drop.bind('dragenter', function(e){
-			this.style.background = '#444444';
+			drop.css('border-color', dragColor);
 		});
 		drop.bind('dragover', function(e){
 			e.preventDefault();
@@ -205,11 +208,11 @@ function UI(args){
 			return false;
 		});
 		drop.bind('dragleave', function(e){
-			this.style.background = '#333333';
+			drop.css('border-color', defaultColor);
 		});
 		drop.bind('drop', function(e){
 			that.drop(e.originalEvent.dataTransfer.getData('Text'));
-			this.style.background = '#333333';
+			drop.css('border-color', defaultColor).hide();
 		});
 	};
 
