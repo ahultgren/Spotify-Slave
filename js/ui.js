@@ -75,16 +75,19 @@ function UI(args){
 	function Admin(ui){
 		var that = this,
 			token = $('#admin-token'),
-			toggle = $('#admin-toggle');
+			toggle = $('#admin-toggle'),
+			adminPassRow = $('#admin-row');
 
 		that.ui = ui;
 
 		toggle.click(function(){
 			if( $(this).is(':checked') ){
 				that.ui.main.socket.setAdminMode(token.val());
+				adminPassRow.slideDown(200);
 			}
 			else {
 				that.ui.main.socket.setAdminMode();
+				adminPassRow.slideUp(200);
 			}
 		});
 	}
