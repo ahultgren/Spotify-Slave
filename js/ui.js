@@ -28,6 +28,7 @@ function UI(args){
 		that.socket = ui.main.socket;
 
 		that.initialize();
+		that.changeServer();
 	}
 
 	Connect.prototype.initialize = function() {
@@ -66,6 +67,18 @@ function UI(args){
 			that.socket.disconnect();
 			allConnectInputs.prop('disabled', false);
 			disconnectButton.prop('disabled', true);
+		});
+	};
+
+	Connect.prototype.changeServer = function() {
+		var that = this,
+			serverToggle = $('#server-toggle'),
+			serverRow = $('#server-row');
+
+		serverToggle.toggle(function(){
+			serverRow.slideDown(200);
+		}, function(){
+			serverRow.slideUp(200);
 		});
 	};
 
