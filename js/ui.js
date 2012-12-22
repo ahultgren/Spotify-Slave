@@ -95,13 +95,19 @@ function UI(args){
 		that.ui = ui;
 
 		toggle.click(function(){
-			if( $(this).is(':checked') ){
+			if( toggle.is(':checked') ){
 				that.ui.main.socket.setAdminMode(token.val());
 				adminPassRow.slideDown(200);
 			}
 			else {
 				that.ui.main.socket.setAdminMode();
 				adminPassRow.slideUp(200);
+			}
+		});
+
+		token.on('change', function(){
+			if( toggle.is(':checked') ){
+				that.ui.main.socket.setAdminMode(token.val());
 			}
 		});
 	}
