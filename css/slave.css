@@ -32,8 +32,8 @@ input[type="checkbox"] {
 	-webkit-appearance: checkbox;
 }
 
-.sp-button:disabled {
-	text-shadow: none;
+label {
+	font-size: 16px;
 }
 
 
@@ -65,15 +65,20 @@ header h1 {
 	display: none;
 }
 
+#server-toggle {
+	font-size: 11px;
+}
+
 
 /* Form */
 
 .form {
 	max-width: 350px;
-	margin: 10px auto 0;
+	margin: 15px auto 0;
+	position: relative;
 }
 .form.short {
-	margin-top: 0;
+	margin-top: 5px;
 }
 
 .form .left,
@@ -94,6 +99,7 @@ header h1 {
 .form .left {
 	min-width: 150px;
 	clear: left;
+	line-height: 1.2;
 }
 .form .right {
 }
@@ -101,6 +107,13 @@ header h1 {
 label {
 	display: inline-block;
 	height: 30px;
+}
+
+.hint {
+	margin-right: 7px;
+}
+.hint + input {
+	min-width: 100px;
 }
 
 
@@ -167,6 +180,9 @@ footer {
 .sp-button {
 	padding: 5px;
 }
+.sp-button:disabled {
+	text-shadow: none;
+}
 
 .sp-list {
 	max-height: none;
@@ -174,4 +190,14 @@ footer {
 
 .input {
 	margin-top: 0;
+}
+
+.tooltip {
+	display: none;
+	position: absolute;
+	width: 150px;
+	padding: 0 20px;
+}
+.tooltip.active {
+	display: block;
 }

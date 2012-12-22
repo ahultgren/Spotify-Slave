@@ -1,5 +1,5 @@
 function UI(args){
-	var ui, connect, drop, admin, feedback;
+	var ui, connect, drop, admin, feedback, tooltip;
 
 	/* UI
 	 * Controller for everything in the UI
@@ -15,6 +15,7 @@ function UI(args){
 		playlist = new Playlist(that);
 		admin = new Admin(that);
 		feedback = new Feedback(that);
+		tooltip = new Tooltip($('.tooltip'));
 	}
 
 
@@ -287,4 +288,25 @@ function UI(args){
 
 	ui = new UI(args);
 	return ui;
+
+
+	/* Tooltip
+	 * Module for displaying tooltips next to focused elements
+	 */
+	function Tooltip (tooltips) {
+		tooltips.each(function(){
+			var tooltip = $(this),
+				target = $('#' + tooltip.attr('data-for'));
+
+			target.on('focus', function(e){
+				tooltip.addClass('active').css({
+					top: target.position().top,
+					right: -tooltip.outerWidth()
+				});
+			})
+			.on('blur', function(e){
+				tooltip.removeClass('active');
+			});
+		});
+	}
 }
