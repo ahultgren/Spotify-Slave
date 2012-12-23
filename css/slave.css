@@ -33,6 +33,12 @@ input[type="password"]:disabled {
 	border-image: none;
 }
 
+input[type="text"]:focus,
+input[type="password"]:focus {
+	border-color: #37a600;
+	border-image: none;
+}
+
 input[type="checkbox"] {
 	-webkit-appearance: checkbox;
 }
