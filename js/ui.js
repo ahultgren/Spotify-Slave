@@ -105,7 +105,7 @@ function UI(args){
 			}
 		});
 
-		token.on('change', function(){
+		token.on('input', function(){
 			if( toggle.is(':checked') ){
 				that.ui.main.socket.setAdminMode(token.val());
 			}
