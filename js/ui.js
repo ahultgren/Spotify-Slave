@@ -135,7 +135,9 @@ function UI(args){
 		var that = this,
 			models = that.ui.main.models,
 			type = (new models.Link(link)).type,
-			playlist = that.ui.main.playlist;
+			playlist = that.ui.main.playlist,
+			promise = $.Deferred(),
+			wasEmpty = !playlist.length;
 
 		/* Types:
 			1: artist
@@ -194,9 +196,15 @@ function UI(args){
 			break;
 		}
 
-		if( playlist.tracks.length ){
+		if( wasEmpty && playlist.tracks.length ){
 			that.ui.main.player.context = playlist;
+			promise.resolve();
 		}
+		else {
+			promise.reject();
+		}
+
+		return promise.promise();
 	};
 
 	Drop.prototype.dropInZone = function() {
@@ -219,8 +227,10 @@ function UI(args){
 			drop.css('border-color', defaultColor);
 		});
 		zone.on('drop', function(e){
-			that.drop(e.originalEvent.dataTransfer.getData('Text'));
-			drop.css('border-color', defaultColor).hide();
+			drop.css('border-color', defaultColor);
+			that.drop(e.originalEvent.dataTransfer.getData('Text')).done(function(){
+				drop.hide();
+			});
 		});
 	};
 
