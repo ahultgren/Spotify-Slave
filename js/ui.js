@@ -1,5 +1,5 @@
 function UI(args){
-	var ui, connect, drop, admin, feedback;
+	var ui, connect, drop, admin, feedback, tooltip;
 
 	/* UI
 	 * Controller for everything in the UI
@@ -15,6 +15,7 @@ function UI(args){
 		playlist = new Playlist(that);
 		admin = new Admin(that);
 		feedback = new Feedback(that);
+		tooltip = new Tooltip($('.tooltip'));
 	}
 
 
@@ -28,6 +29,7 @@ function UI(args){
 		that.socket = ui.main.socket;
 
 		that.initialize();
+		that.changeServer();
 	}
 
 	Connect.prototype.initialize = function() {
@@ -69,22 +71,43 @@ function UI(args){
 		});
 	};
 
+	Connect.prototype.changeServer = function() {
+		var that = this,
+			serverToggle = $('#server-toggle'),
+			serverRow = $('#server-row');
+
+		serverToggle.toggle(function(){
+			serverRow.slideDown(200);
+		}, function(){
+			serverRow.slideUp(200);
+		});
+	};
+
 	/* Admin
 	 * Controls whether or not admin mode is on 
 	 */
 	function Admin(ui){
 		var that = this,
 			token = $('#admin-token'),
-			toggle = $('#admin-toggle');
+			toggle = $('#admin-toggle'),
+			adminPassRow = $('#admin-row');
 
 		that.ui = ui;
 
 		toggle.click(function(){
-			if( $(this).is(':checked') ){
+			if( toggle.is(':checked') ){
 				that.ui.main.socket.setAdminMode(token.val());
+				adminPassRow.slideDown(200);
 			}
 			else {
 				that.ui.main.socket.setAdminMode();
+				adminPassRow.slideUp(200);
+			}
+		});
+
+		token.on('input', function(){
+			if( toggle.is(':checked') ){
+				that.ui.main.socket.setAdminMode(token.val());
 			}
 		});
 	}
@@ -112,7 +135,9 @@ function UI(args){
 		var that = this,
 			models = that.ui.main.models,
 			type = (new models.Link(link)).type,
-			playlist = that.ui.main.playlist;
+			playlist = that.ui.main.playlist,
+			promise = $.Deferred(),
+			wasEmpty = !playlist.length;
 
 		/* Types:
 			1: artist
@@ -171,29 +196,41 @@ function UI(args){
 			break;
 		}
 
-		if( playlist.tracks.length ){
+		if( wasEmpty && playlist.tracks.length ){
 			that.ui.main.player.context = playlist;
+			promise.resolve();
 		}
+		else {
+			promise.reject();
+		}
+
+		return promise.promise();
 	};
 
 	Drop.prototype.dropInZone = function() {
 		var that = this,
-			drop = $('#dropzone');
+			zone = $('.list-box'),
+			drop = $('#dropzone'),
+			defaultColor = drop.css('border-color'),
+			dragColor = '#5c5c5c',
+			w = $(window);
 
 		drop.bind('dragenter', function(e){
-			this.style.background = '#444444';
+			drop.css('border-color', dragColor);
 		});
-		drop.bind('dragover', function(e){
+		zone.bind('dragover', function(e){
 			e.preventDefault();
 			e.originalEvent.dataTransfer.dropEffect = 'copy';
 			return false;
 		});
 		drop.bind('dragleave', function(e){
-			this.style.background = '#333333';
+			drop.css('border-color', defaultColor);
 		});
-		drop.bind('drop', function(e){
-			that.drop(e.originalEvent.dataTransfer.getData('Text'));
-			this.style.background = '#333333';
+		zone.on('drop', function(e){
+			drop.css('border-color', defaultColor);
+			that.drop(e.originalEvent.dataTransfer.getData('Text')).done(function(){
+				drop.hide();
+			});
 		});
 	};
 
@@ -220,7 +257,9 @@ function UI(args){
 
 		// Append playlist to DOM
 		list = new that.ui.main.views.List(that.ui.main.playlist);
-		document.body.appendChild(list.node);
+		list.node.classList.add("sp-light");
+		
+		$('.list-box').append(list.node);
 	}
 
 
@@ -265,4 +304,25 @@ function UI(args){
 
 	ui = new UI(args);
 	return ui;
+
+
+	/* Tooltip
+	 * Module for displaying tooltips next to focused elements
+	 */
+	function Tooltip (tooltips) {
+		tooltips.each(function(){
+			var tooltip = $(this),
+				target = $('#' + tooltip.attr('data-for'));
+
+			target.on('focus', function(e){
+				tooltip.addClass('active').css({
+					top: target.position().top,
+					right: -tooltip.outerWidth()
+				});
+			})
+			.on('blur', function(e){
+				tooltip.removeClass('active');
+			});
+		});
+	}
 }

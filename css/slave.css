@@ -1,19 +1,152 @@
-#dropzone {
-	text-align:center;
-	padding:50px;
-	border:1px solid #000;
-	background:#333333;
-	color:#aaaaaa;
-	font-size:16px;
-	margin-bottom:10px;
-}
+/* Colors
+	Main: #37a600
+	Dark: #3b552e
+	light: #a0f038
+	White: #f2f7f0
+	Bg: #373737
+	Gray: #5c5c5c
+	Borders: #777
+*/
 
-#admin-toggle {
-	-webkit-appearance: checkbox;
+/* General elements */
+
+body {
+	line-height: 1.5;
 }
 
 p {
-	overflow: hidden;
+	margin: 1em 0;
+}
+
+input[type="text"], input[type="password"] {
+	background: #fff;
+	border: 1px solid #999;
+	border-image: none;
+	border-radius: 2px;
+	width: 208px;
+	height: 35px;
+	padding: 10px;
+}
+input[type="text"]:disabled,
+input[type="password"]:disabled {
+	background: #5c5c5c;
+	border-image: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+	border-color: #37a600;
+	border-image: none;
+}
+
+input[type="checkbox"] {
+	-webkit-appearance: checkbox;
+}
+
+label {
+	font-size: 16px;
+}
+
+
+/* Header */
+
+header {
+	background: #37A600;
+}
+
+header h1 {
+	height: 45px;
+	color: #ECEBE8;
+	font-size: 1.6em;
+	font-weight: normal;
+	text-align: center;
+	line-height: 2em;
+	padding-top: 4px;
+}
+
+
+/* Main */
+
+.main {
+	margin: 2em;
+}
+
+#server-row,
+#admin-row {
+	display: none;
+}
+
+#server-toggle {
+	font-size: 11px;
+}
+
+
+/* Form */
+
+.form {
+	max-width: 350px;
+	margin: 15px auto 0;
+	position: relative;
+}
+.form.short {
+	margin-top: 5px;
+}
+
+.form .left,
+.form .right {
+	display: inline-block;
+	float: left;
+}
+.form .left:not(input):not(button):not(.short),
+.form .right:not(input):not(button):not(.short) {
+	height: 35px;
+	margin-top: 10px;
+}
+.form button.short,
+.form input.short {
+	margin-top: 0;
+}
+
+.form .left {
+	min-width: 150px;
+	clear: left;
+	line-height: 1.2;
+}
+.form .right {
+}
+
+label {
+	display: inline-block;
+	height: 30px;
+}
+
+.hint {
+	margin-right: 7px;
+}
+.hint + input {
+	width: 145px;
+}
+
+
+/* List */
+
+.list-box {
+	min-height: 150px;
+	margin: 50px 0 0 0;
+}
+
+
+/* Drop */
+
+#dropzone {
+	border: 6px dashed #999;
+	border-radius: 12px;
+	width: 50%;
+	margin: 0 auto;
+	padding: 50px;
+	color: #aaaaaa;
+	font-size: 20px;
+	text-align: center;
 }
 
 
@@ -21,4 +154,61 @@ p {
 .error,
 .success {
 	display: none;
+}
+
+.error {
+	color: #b30023;
+}
+
+.success {
+	color: #37a600;
+}
+
+
+/* Footer */
+
+footer {
+	text-align: center;
+	padding: 1em;
+}
+
+/* General classes */
+
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+.clearfix {
+    display: inline-block;
+}
+.clearfix {
+    display: block;
+}
+
+.sp-button {
+	padding: 5px;
+}
+.sp-button:disabled {
+	text-shadow: none;
+}
+
+.sp-list {
+	max-height: none;
+}
+
+.input {
+	margin-top: 0;
+}
+
+.tooltip {
+	display: none;
+	position: absolute;
+	width: 150px;
+	padding: 0 20px;
+}
+.tooltip.active {
+	display: block;
 }
