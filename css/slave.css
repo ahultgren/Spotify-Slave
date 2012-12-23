@@ -23,7 +23,7 @@ input[type="text"], input[type="password"] {
 	border: 1px solid #999;
 	border-image: none;
 	border-radius: 2px;
-	min-width: 200px;
+	width: 208px;
 	height: 35px;
 	padding: 10px;
 }
@@ -124,7 +124,7 @@ label {
 	margin-right: 7px;
 }
 .hint + input {
-	min-width: 100px;
+	width: 145px;
 }
 
 
