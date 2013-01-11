@@ -127,6 +127,10 @@ function UI(args){
 	Drop.prototype.initialize = function() {
 		var that = this;
 
+		that.header = $('.list-header');
+		that.zone = $('.list-box');
+		that.dropZone = $('#dropzone');
+
 		that.dropInZone();
 		that.dropOnIcon();
 	};
@@ -198,6 +202,7 @@ function UI(args){
 
 		if( wasEmpty && playlist.tracks.length ){
 			that.ui.main.player.context = playlist;
+			that.unEmpty();
 			promise.resolve();
 		}
 		else {
@@ -209,8 +214,8 @@ function UI(args){
 
 	Drop.prototype.dropInZone = function() {
 		var that = this,
-			zone = $('.list-box'),
-			drop = $('#dropzone'),
+			zone = that.zone,
+			drop = that.dropZone,
 			defaultColor = drop.css('border-color'),
 			dragColor = '#5c5c5c',
 			w = $(window);
@@ -228,9 +233,7 @@ function UI(args){
 		});
 		zone.on('drop', function(e){
 			drop.css('border-color', defaultColor);
-			that.drop(e.originalEvent.dataTransfer.getData('Text')).done(function(){
-				drop.hide();
-			});
+			that.drop(e.originalEvent.dataTransfer.getData('Text'));
 		});
 	};
 
@@ -245,13 +248,24 @@ function UI(args){
 		});
 	};
 
+	Drop.prototype.unEmpty = function() {
+		this.dropZone.addClass('unempty');
+		this.header.removeClass('empty');
+	};
+
+	Drop.prototype.empty = function() {
+		this.dropZone.removeClass('unempty');
+		this.header.addClass('empty');
+	};
+
 
 	/* Playlist
 	 * Shows the playlist in the ui
 	 */
 	function Playlist(ui){
 		var that = this,
-			list;
+			list,
+			clear = $('.clear-queue');
 
 		that.ui = ui;
 
@@ -260,7 +274,26 @@ function UI(args){
 		list.node.classList.add("sp-light");
 		
 		$('.list-box').append(list.node);
+
+		// Clear list on click on button
+		clear.click(function(){
+			that.clear();
+		});
 	}
+
+	Playlist.prototype.clear = function() {
+		var that = this,
+			playlist = that.ui.main.playlist;
+
+		while(playlist.length){
+			try {
+				playlist.remove(0);
+			}
+			catch(e){}
+		}
+
+		drop.empty();
+	};
 
 
 	/* Feedback

@@ -19,7 +19,7 @@
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
-	<header>
+	<header class="header">
 		<h1>Frodj</h1>
 	</header>
 	<article class="main">
@@ -54,7 +54,11 @@
 		<p class="error form" id="connect-error">Something went wrong. Perhaps try another room name?</p>
 	</article>
 	<section class="list-box clearfix">
-		<div id="dropzone">Drag and drop something here!</div>
+		<header class="list-header clearfix empty">
+			<h2 class="list-title">Play queue:</h2>
+			<a class="clear-queue" href="#">Clear queue</a>
+		</header>
+		<div id="dropzone">Drag and drop something here to add it to the queue!</div>
 	</section>
 	<footer>
 		<a href="http://frodj.me">Frodj</a> | <a href="http://frojd.se">Fröjd Interactive</a>

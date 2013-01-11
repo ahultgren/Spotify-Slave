@@ -50,11 +50,11 @@ label {
 
 /* Header */
 
-header {
+.header {
 	background: #37A600;
 }
 
-header h1 {
+.header h1 {
 	height: 45px;
 	color: #ECEBE8;
 	font-size: 1.6em;
@@ -135,6 +135,21 @@ label {
 	margin: 50px 0 0 0;
 }
 
+.list-header {
+	max-width: 50%;
+	margin: 0 auto 20px;
+}
+.list-header.empty {
+	display: none;
+}
+
+.list-title {
+	margin-bottom: 0;
+}
+.clear-queue {
+	color: #666;
+}
+
 
 /* Drop */
 
@@ -147,6 +162,9 @@ label {
 	color: #aaaaaa;
 	font-size: 20px;
 	text-align: center;
+}
+#dropzone.unempty {
+	display: none;
 }
 
 
