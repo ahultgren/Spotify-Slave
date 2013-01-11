@@ -16,6 +16,9 @@ function UI(args){
 		admin = new Admin(that);
 		feedback = new Feedback(that);
 		tooltip = new Tooltip($('.tooltip'));
+
+		// Expose public methods
+		that.disableConnect = connect.disable.bind(connect);
 	}
 
 
@@ -37,10 +40,10 @@ function UI(args){
 			url = $('#url'),
 			namespace = $('#namespace'),
 			token = $('#token'),
-			link = $('#room-href'),
-			connectButton = $('#connectButton'),
-			disconnectButton = $('#disconnectButton'),
-			allConnectInputs = $().add(connectButton).add(url).add(namespace);
+			link = that.link = $('#room-href'),
+			connectButton = that.connectButton = $('#connectButton'),
+			disconnectButton = that.disconnectButton = $('#disconnectButton'),
+			allConnectInputs = that.allConnectInputs = $().add(connectButton).add(url).add(namespace);
 
 		// Generate external link to room
 		$.merge(url, namespace).on('keyup', function(){
@@ -55,8 +58,7 @@ function UI(args){
 
 			that.socket.connect(url.val(), namespace.val(), $('#admin-toggle').is(':checked') && $('#admin-token').val() || undefined)
 				.done(function(){
-					feedback.show('connectSuccess');
-					disconnectButton.prop('disabled', false);
+					that.disable();
 				})
 				.fail(function(){
 					allConnectInputs.prop('disabled', false);
@@ -66,9 +68,24 @@ function UI(args){
 
 		disconnectButton.click(function(){
 			that.socket.disconnect();
+			feedback.hide('connectSuccess');
+
 			allConnectInputs.prop('disabled', false);
 			disconnectButton.prop('disabled', true);
 		});
+	};
+
+	Connect.prototype.disable = function(server, namespace) {
+		var that = this;
+
+		if( server && namespace ){
+			that.link.attr('href', server + '/' + namespace);
+			that.link.text(server + '/' + namespace);
+		}
+
+		feedback.show('connectSuccess');
+		that.allConnectInputs.prop('disabled', true);
+		that.disconnectButton.prop('disabled', false);
 	};
 
 	Connect.prototype.changeServer = function() {

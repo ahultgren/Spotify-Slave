@@ -5,6 +5,8 @@ function Socket(args){
 		that.io = args.io;
 		that.main = args.main;
 		that.socket;
+
+		checkLostConnection(that);
 	}
 
 	Socket.prototype.connect = function(server, namespace, adminToken) {
@@ -41,6 +43,9 @@ function Socket(args){
 				});
 
 				localStorage.setItem('slaveToken-' + namespace, slaveToken);
+				localStorage.setItem('lastConnection', namespace);
+				localStorage.setItem('lastConnectionTime', Date.now());
+				localStorage.setItem('lastConnectionServer', server);
 			})
 			.fail(function(){
 				promise.reject.apply(this, arguments);
@@ -101,6 +106,10 @@ function Socket(args){
 		that.socket.disconnect();
 		that.io.j = [];
 		that.io.sockets = [];
+
+		localStorage.removeItem('lastConnection');
+		localStorage.removeItem('lastConnectionTime');
+		localStorage.removeItem('lastConnectionServer');
 	};
 
 	Socket.prototype.validate = function(server, namespace) {
@@ -111,6 +120,21 @@ function Socket(args){
 			return true;
 		}
 	};
+
+	function checkLostConnection(that){
+		var lastConnection = localStorage.getItem('lastConnection'),
+			lastConnectionTime = localStorage.getItem('lastConnectionTime'),
+			lastConnectionServer = localStorage.getItem('lastConnectionServer');
+
+		if( lastConnection && lastConnectionTime && lastConnectionTime > Date.now() - 15 * 60 * 1000 ){
+			$('body').alert('It seems your last connection was interrupted, do you whish to reconnect?', 'Reconnect', 'No').confirmed
+				.done(function(){
+					that.connect(lastConnectionServer, lastConnection);
+					that.main.ui.disableConnect(lastConnectionServer, lastConnection);
+					localStorage.setItem('lastConnectionTime', Date.now());
+				});
+		}
+	}
 
 	var socket = new Socket(args);
 	return socket;

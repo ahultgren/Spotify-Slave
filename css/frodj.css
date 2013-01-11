@@ -183,6 +183,22 @@ label {
 }
 
 
+/* Alert */
+.alert {
+	background-color: #f8f8c3;
+	padding: 5px 35px 10px 14px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	color: #C09853;
+}
+.alert p {
+	display: inline-block;
+}
+.alert button {
+	display: inline-block;
+	margin: 0 5px 0 10px;
+}
+
+
 /* Footer */
 
 footer {
