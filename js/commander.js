@@ -141,7 +141,9 @@ function Commander(args){
 
 			// Load track
 			models.Track.fromURI(uri, function(track){
-				playlist.add(track);
+				if( track.availableForPlayback ){
+					playlist.add(track);
+				}
 			});
 		};
 
