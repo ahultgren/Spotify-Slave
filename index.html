@@ -3,14 +3,15 @@
 <head>
 	<meta charset="utf-8">
 
-	<title>Spotify Slave</title>
+	<title>Frodj</title>
 
-	<link rel="stylesheet" href="sp://import/css/adam.css">
+	<link rel="stylesheet" href="sp://import/css/eve.css">
 	<link rel="stylesheet" href="sp://import/css/api.css">
-	<link rel="stylesheet" href="css/slave.css">
+	<link rel="stylesheet" href="css/frodj.css">
 
 	<script type="text/javascript" src="js/libs/jquery.min.js"></script>
 	<script type="text/javascript" src="js/libs/socket.io.js"></script>
+	<script type="text/javascript" src="js/libs/alert.js"></script>
 
 	<script type="text/javascript" src="js/socket.js"></script>
 	<script type="text/javascript" src="js/commander.js"></script>
@@ -19,12 +20,69 @@
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
-	<header>
-		<h1>Spotify Slave</h1>
+	<header class="header">
+		<h1>Frodj</h1>
 	</header>
-	<input type="text" class="input" id="url" value="http://localhost:3000/slave" />
-	<input type="text" class="input" id="token" value="1337" />
-	<button class="sp-button" id="connectButton">Connect to server</button>
-	<div id="dropzone">Drag and drop something here!</div>
+	<article class="main">
+		<p class="clearfix form">
+			<label class="left" for="url">
+				Room name: <br />
+				<a id="server-toggle" href="#">Change server?</a>
+			</label>
+			<span class="right"><span class="hint">frodj.me/</span><input type="text" class="input" id="namespace" placeholder="your_name_or_somethin" /></span>
+			<span class="tooltip" data-for="namespace">Where your friends can see what's being played.</span>
+		</p>
+		<p class="clearfix form" id="server-row">
+			<label class="left"></label><input type="text" class="input right" id="url" value="http://frodj.me" />
+		</p>
+		
+		<p class="clearfix form short">
+			<label class="left" for="admin-togle">Admin-mode:</label>
+			<span class="right"><input type="checkbox" id="admin-toggle" /></span>
+			<span class="tooltip" data-for="admin-toggle">Let only admins to change songs directly, or leave it open for everyone.</span>
+		</p>
+		<p class="clearfix form short" id="admin-row">
+			<label class="left"></label>
+			<input type="password" class="input right" id="admin-token" placeholder="Password" />
+			<span class="tooltip" data-for="admin-token">Note that the password is automatically updated as soon as you change it.</span>
+		</p>
+		<p class="clearfix form">
+			<span class="short left"><button class="sp-button" id="disconnectButton" disabled>Disconnect</button></span>
+			<button class="sp-button right success" id="connectButton">Connect</button>
+		</p>
+
+		<p class="success form" id="connect-success">You are connected. Visit your player at: <a href="http://frodj.me/room_name" id="room-href">http://frodj.me/room_name</a></p>
+		<p class="error form" id="connect-error">Something went wrong. Perhaps try another room name?</p>
+	</article>
+	<section class="list-box clearfix">
+		<header class="list-header clearfix empty">
+			<h2 class="list-title">Play queue:</h2>
+			<a class="clear-queue" href="#">Clear queue</a>
+		</header>
+		<div id="dropzone">Drag and drop something here to add it to the queue!</div>
+	</section>
+	<footer>
+		<a href="http://frodj.me">Frodj</a> | <a href="http://frojd.se">Fröjd Interactive</a>
+	</footer>
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-36967009-3']);
+	  _gaq.push(['_trackPageview']);
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
+	<script type="text/javascript">
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-36967009-2']);
+	  _gaq.push(['_trackPageview']);
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+	</script>
 </body>
 </html>
