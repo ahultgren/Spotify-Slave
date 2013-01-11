@@ -9,7 +9,7 @@ function Socket(args){
 
 	Socket.prototype.connect = function(server, namespace, adminToken) {
 		var that = this,
-			slaveToken = (Math.random()*0xFFFFFFFFFFFFFFFFFFFF).toString(36),
+			slaveToken = localStorage.getItem('slaveToken-' + namespace) || (Math.random()*0xFFFFFFFFFFFFFFFFFFFF).toString(36),
 			httpPath = server + '/' + namespace,
 			socketPath = httpPath + '_slave?token=' + slaveToken,
 			promise = $.Deferred();
@@ -39,8 +39,13 @@ function Socket(args){
 				that.socket.on('refresh', function(data){
 					that.update();
 				});
+
+				localStorage.setItem('slaveToken-' + namespace, slaveToken);
 			})
-			.fail(promise.reject);
+			.fail(function(){
+				promise.reject.apply(this, arguments);
+				localStorage.removeItem('slaveToken' + namespace);
+			});
 		}
 		else {
 			promise.reject();
