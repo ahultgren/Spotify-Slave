@@ -94,6 +94,7 @@ function Commander(args){
 			var that = this,
 				commander = that.commander = args.commander,
 				lastTrack,
+				lastContext,
 				main = that.commander.main,
 				player = main.player,
 				models = main.models,
@@ -101,12 +102,33 @@ function Commander(args){
 
 			// Listen for track ending and change to apps playlist if it's not empty
 			player.observe(models.EVENT.CHANGE, function observer(e){
-				if( e.data.curtrack && !player.context && playlist.length ){
-					player.play(playlist.get(0), playlist);
-
-					//## This observer needs to be removed to not repeat the play queue, but how to add it again?
-					player.ignore(models.EVENT.CHANGE, observer);
+				// Change to play queue when the track is changed, there's queued tracks and there is no known context
+				if( e.data.curtrack && player.playing && playlist.length && !player.context && !lastContext ){
+					(function playNextTrack(track){
+						try {
+							player.play(playlist.get(0), playlist);
+						}
+						catch(e){
+							// Noted problem when a track is invisible (bug in Spotify) or not playable, it's never played and the queue can never move past it
+							try {
+								playlist.remove(playlist.get(0));
+								playNextTrack(playlist.get(0));
+							}
+							catch(e){}
+						}
+					}(playlist.get(0)));
 				}
+
+				// Remove last played track when track is changed
+				if( e.data.curtrack && lastContext ){
+					try {
+						playlist.remove(lastTrack);
+					}
+					catch(e){}
+				}
+
+				lastTrack = player.track;
+				lastContext = player.context;
 			});
 		}
 
