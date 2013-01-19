@@ -93,3 +93,9 @@
     * Save connection data on successfull connect
     * When connecting again and name is taken, try with the saved token
     * When loading the app and last conneciton was recent and has not been taken by someone else (how do i know?), ask if user wants to reconnect
+
+### 0.5.1
+* Hotfix: forgot to update version number for 0.5
+
+### 0.5.2
+* Chore: updated docs to encourage participation and contribution

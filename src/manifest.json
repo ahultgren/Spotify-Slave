@@ -1,7 +1,7 @@
 {
 	"BundleType": "Application",
 	"BundleIdentifier": "frodj",
-	"BundleVersion": "0.5.1",
+	"BundleVersion": "0.5.2",
 	"AcceptedLinkTypes":[
 		"album",
 		"artist",
